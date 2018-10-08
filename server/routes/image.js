@@ -6,6 +6,7 @@ module.exports = function (app) {
     // Calls must be authenticated.
     //user.middleware(app)
 
-    app.post('/uploadimage', image.uploadImage, image.upload)
-    app.get('/downloadimages', image.download)
+    app.get('/images/', image.downloadAll)
+    app.get('/image/:imageId', image.downloadOne)
+    app.post('/image/', image.uploadImage, image.upload)
 }
