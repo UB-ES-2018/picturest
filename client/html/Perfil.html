@@ -53,7 +53,56 @@
             max-width: 100%;
         }
     }
-    </style>
+
+.contenedor{
+  width:90px;
+  height:240px;
+  position:absolute;
+  right:0px;
+  bottom:0px;
+}
+.btn{
+  width:40px;
+  height:40px;
+  border-radius:100%;
+  border:none;
+  color:#FFF;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  font-size:28px;
+  outline:none;
+  position:absolute;
+  right:0;
+  bottom:0;
+  margin-right:26px;
+  transform:scale(0);
+}
+.botonF1{
+  width:60px;
+  height:60px;
+  border-radius:100%;
+  background:#F44336;
+  margin-right:16px;
+  margin-bottom:16px;
+  border:none;
+  outline:none;
+  color:#FFF;
+  font-size:36px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  transition:.3s; 
+  position: fixed;
+  bottom: 2px;
+  right: 0px; 
+}
+.botonF1:hover span{
+  transform:rotate(360deg);
+}
+.botonF1:active{
+  transform:scale(1.1);
+}
+.animacionVer{
+  transform:scale(1);
+}
+</style>
     
     <head>
         <meta charset="utf-8">
@@ -69,6 +118,39 @@
     </head>
 
     <body>
+
+        <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header text-center">
+                            <h1 class="h3 mb-3 font-weight-normal">Create Pin</h1>
+                        </div>
+
+                        <div class="modal-body mx-3">
+                            <form id="my-form">
+                                
+                                <div class="md-form mb-4">
+                                    <label for="webSite" class="sr-only">webSite</label>
+                                    <input type="url" id="webSite" name="webSite" class="form-control validate" placeholder="Add the URL this Pin links to" required>
+                                </div>
+
+                                <div class="md-form mb-4">
+                                    <label for="description" class="sr-only">Description</label>
+                                    <input type="text" id="description" name="description" class="form-control validate" placeholder="Say more about this Pin" required autofocus>
+                                </div>
+                                
+                                <button type="submit">Upload Pin</button>
+                            </form>
+                        </div>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>                        
+                    </div>
+                </div>
+            </div>
+
+
+
+
     <!-- Navigator bar-->
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
@@ -117,7 +199,18 @@
       </div>  
     </div>
 
+    <div class="contenedor">
+        <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
+          <span>+</span>
+        </button>
+    </div>
     
     <!--TODO!!!!!!!!!!!!!!!!!!!!!!!! para el boton de añadir https://codepen.io/waynelkh/pen/rapjbJ -->
     </body>
 </html>
+
+<script>
+    $('.botonF1').click(function(){
+        $('.btn').addClass('animacionVer');
+    })
+</script>
