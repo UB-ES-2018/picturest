@@ -38,8 +38,13 @@
 				                	<label for="password" class="sr-only">Password</label>
 				                    <input type="password" id="password" name="password" class="form-control validate" placeholder="Password" required autofocus>
 			                	</div>
+							    
+							    <div class="md-form mb-4">
+				                	<label for="age" class="sr-only">Age</label>
+				                    <input type="text" id="age" name="age" class="form-control validate" placeholder="Age" required autofocus>
+			                	</div>
 								
-							    <button type="submit">Login</button>
+							    <button type="submit">Submit</button>
 							</form>
 						</div>
 						<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -47,7 +52,7 @@
 						    (function($){
 						        function processForm( e ){
 						            $.ajax({
-						                url: 'http://localhost:3000/login',
+						                url: 'http://localhost:3000/signup',
 						                dataType: 'text',
 						                type: 'post',
 						                contentType: 'application/x-www-form-urlencoded',
