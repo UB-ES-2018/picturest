@@ -56,3 +56,20 @@ Response
     token: token
 }
 ```
+- Upload image: ```POST /image```
+Request: [Using Postman choose form-data]
+Body:
+```
+{
+    "image": {{IMAGE}},
+    "token": token
+}
+```
+Response:
+```
+{
+    "url": {{Uploaded image URL}}
+}
+```
+- Download an image: ```GET /image/:imageId```
+- Download all images: ```GET /image/```
