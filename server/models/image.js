@@ -9,8 +9,8 @@ var ImageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
-        type: String,
+    content: {
+        type: Buffer,
         required: true
     }
 })

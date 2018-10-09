@@ -1,15 +1,9 @@
 var Image = require('../models/image')
 var multer = require('multer')
+var jwt = require('jsonwebtoken')
 
 // Destination of our image
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'static/')
-    },
-    filename: function(req, file, cb) {
-        cb(null, new Date().toISOString() + file.originalname);
-    }
-});
+const storage = multer.memoryStorage()
 
 // Reject a file unless it is a jpeg or png
 const fileFilter = (req, file, cb) => {
@@ -32,60 +26,44 @@ exports.uploadImage = upload.single('image')
 
 // POST upload an image
 exports.upload = function (req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
 
-    // New Image
-    let image = new Image ({
-        user: req.body.user,
-        name: req.body.name,
-        image: req.file.path
-    });
+    console.log(token)
+    let dbImage = new Image({
+        user : decodedToken.email,
+        name : req.file.originalname,
+        content : req.file.buffer
+    })
 
-    // Save the image to the DB
-    image.save(function (err, saved) {
-            if (err) throw err
-            if (saved) {
-                // if OK sends true
-                res.json({
-                    success: true,
-                    message: "Image uploaded successfully",
-                    uploadedImage: {
-                        name: image.name,
-                        request: {
-                            type: 'GET',
-                            url: "http://localhost:3000/" + image.image
-                        }
-                    }
-                })
-            }
-        })
+    dbImage.save().then(function(dbRes) {
+        console.log('Image uploaded to db with id:', dbRes._id)
+        res.json({url : 'http://localhost:3000/image/' + dbRes._id})
+    })
 }
 
 // GET download all images
-exports.download = function (req, res) {
-    Image.find()
-        .select("user name image")
-        .exec()
-        .then(docs => {
-            const response = {
-                success: true,
-                count: docs.length,
-                images: docs.map(doc => {
-                    return {
-                        user: doc.user,
-                        name: doc.name,
-                        image: doc.image,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:3000/" + doc.image
-                        }
-                    }
-                })
-            }
-            res.status(200).json(response)
-        })
-        .catch(err => {
-            res.status(500).json({
-                error: err
+exports.downloadAll = function (req, res) {
+    Image.find().then(function(results) {
+        let final = []
+        results.forEach(function(img) {
+            final.push({
+                url : 'http://localhost:3000/download/' + img._id,
+                user : img.user,
+                name : img.name
             })
         })
+        res.json(final)
+    })
+}
+
+exports.downloadOne = function(req, res) {
+    let imageId = req.params.imageId
+    console.log('requesting image:', imageId)
+    Image.findOne({_id : imageId}).then(function(img) {
+        let buffer = img.content
+        res.write(buffer, 'binary');
+        res.end(null, 'binary')
+    })
+    .catch(console.error)
 }

@@ -29,6 +29,7 @@ mongoose.connect(process.env.DB_HOST).then((db) => {
   require('./server/routes/image.js')(app) // Order changed for testing without login, using middleware pending
   require('./server/routes/user.js')(app)
 
+
     app.disable('etag')
     app.get('*', function (req, res, next) {
       res.setHeader('Last-Modified', (new Date()).toUTCString())
@@ -47,7 +48,7 @@ function useCors (app) {
   // Cors
   var originsWhitelist = [
     'http://localhost',
-    'http://localhost:4200'
+    'http://localhost:3000'
   ]
   var corsOptions = {
     origin: function (origin, callback) {
