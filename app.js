@@ -8,7 +8,7 @@ var app = express()
 
 var mongoose = require('mongoose')
 
-app.use(cors())
+//app.use(cors())
 
 // Connect to mongoDB.
 mongoose.Promise = require('q').Promise
@@ -44,8 +44,7 @@ mongoose.connect(process.env.DB_HOST).then((db) => {
   console.error('App starting error:', err.stack)
   process.exit(1)
 })
-
-/* 
+ 
 // Use Cors.
 function useCors (app) {
   // Cors
@@ -63,4 +62,4 @@ function useCors (app) {
 
   // Here is the magic
   app.use(cors(corsOptions))
-}*/
+}
