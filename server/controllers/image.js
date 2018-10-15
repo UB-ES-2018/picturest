@@ -67,3 +67,20 @@ exports.downloadOne = function(req, res) {
     })
     .catch(console.error)
 }
+
+// Add a tag
+exports.addTag = function (req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    let imageId = req.params.imageId
+    let tag = req.tag
+    console.log(token)
+    Image.findOne({_id : imageId}).then(function(img) {
+        img.tag.push(tag)
+        img.save().then(function(dbRes) {
+            console.log('Image updated to db with id:', dbRes._id)
+            res.json({url : 'http://localhost:3000/image/' + dbRes._id})
+    })
+    .catch(console.error)
+}
