@@ -78,9 +78,10 @@ exports.addTag = function (req, res) {
     console.log(token)
     Image.findOne({_id : imageId}).then(function(img) {
         img.tag.push(tag)
-        img.save().then(function(dbRes) {
+        img.save().then(function (dbRes) {
             console.log('Image updated to db with id:', dbRes._id)
-            res.json({url : 'http://localhost:3000/image/' + dbRes._id})
+            res.json({url: 'http://localhost:3000/image/' + dbRes._id})
+        })
     })
     .catch(console.error)
 }
