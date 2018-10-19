@@ -50,7 +50,9 @@ exports.downloadAll = function (req, res) {
             final.push({
                 url : 'http://localhost:3000/download/' + img._id,
                 user : img.user,
-                name : img.name
+                name : img.name,
+                description : img.description,
+                tag : img.tag
             })
         })
         res.json(final)
@@ -72,12 +74,23 @@ exports.downloadOne = function(req, res) {
 exports.addTag = function (req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
+    let imageId = req.body.imageId
+    let desc = req.body.desc
+    let tags = []
 
-    let imageId = req.params.imageId
-    let tag = req.tag
-    console.log(token)
+    // Find tags in description
+    desc.split(" ").forEach(function(str) {
+        if(str.indexOf("#") == 0) {
+            tags.push(str.substring(1,str.length))
+        }
+    })
+
+    console.debug(desc)
+    console.log(tags)
+
     Image.findOne({_id : imageId}).then(function(img) {
-        img.tag.push(tag)
+        img.description = desc
+        img.tag = tags
         img.save().then(function (dbRes) {
             console.log('Image updated to db with id:', dbRes._id)
             res.json({url: 'http://localhost:3000/image/' + dbRes._id})
