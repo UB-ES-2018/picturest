@@ -85,3 +85,35 @@ exports.addTag = function (req, res) {
     })
     .catch(console.error)
 }
+
+
+// Find images by tag
+exports.findByTag = function (req, res) {
+     
+    Image.find().then(function(results) {
+        let tag_string = req.params.tag
+        let tags = []
+
+        var res = tag_string.split(" ");
+        for (i = 0; i < res.length ; i++){
+    	    if (res[i].indexOf('#') > -1 ) {
+        	    tag = res[i].replace("#", "")
+        	    tags.push(tag)
+            }
+        }
+
+        let matches = []
+        results.forEach(function(img) {
+            for (i = 0; i < img.tag.length; i++){
+                if (tags.includes(i)){
+                    matches.push({
+                        url : 'http://localhost:3000/download/' + img._id,
+                        user : img.user,
+                        name : img.name
+                    })
+                }
+            }
+        })
+        res.json(matches)
+    })
+}
