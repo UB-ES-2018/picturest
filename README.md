@@ -73,3 +73,49 @@ Response:
 ```
 - Download an image: ```GET /image/:imageId```
 - Download all images: ```GET /image/```
+
+- Add tag: ```PUT /image/tag```
+Request body:
+```
+{
+    "imageId": _id (Mongo ObjectId, ex: 5bcc544565532640a4712172),
+    "desc": "Im an #example of #tags"
+}
+```
+Response
+```
+{
+    "url": (Image URL)
+}
+```
+
+- Find tag: ```POST /image/tag```
+Request body:
+```
+{
+    "tags": ["example1", "example2"]
+}
+```
+Response
+```
+{
+    success: true,
+    images: [img1._id, img2._id, img3._id]
+}
+```
+
+- Add profile Picture: ```PUT /image/:username```
+Request body:
+```
+{
+    "imageId": _id (Mongo ObjectId, ex: 5bcc544565532640a4712172),
+    "token": "Token provided on login"
+}
+```
+Response
+```
+{
+    "success": true,
+    "imageId": _id
+}
+```
