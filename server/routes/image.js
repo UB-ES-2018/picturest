@@ -8,7 +8,6 @@ module.exports = function (app) {
 
     app.get('/images/', image.downloadAll)
     app.get('/image/:imageId', image.downloadOne)
-    app.get('/images/:tags', image.findByTag)
+    app.post('/image/tag', image.findByTag)
     app.post('/image/', image.uploadImage, image.upload)
-    app.post('/image/:imageTag', image.addTag)
 }
