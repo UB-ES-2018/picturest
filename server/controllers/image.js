@@ -78,13 +78,8 @@ exports.addTag = function (req, res) {
     let desc = req.body.desc
     let tags = []
 
-    // Find tags in description
-    desc.split(" ").forEach(function(str) {
-        if(str.indexOf("#") == 0) {
-            tags.push(str.substring(1,str.length))
-        }
-    })
-
+    tags = findHashtags(desc)
+    
     console.debug(desc)
     console.log(tags)
 
@@ -97,4 +92,19 @@ exports.addTag = function (req, res) {
         })
     })
     .catch(console.error)
+}
+
+// Finds hashtags
+function findHashtags(searchText) {
+    var regexp = /\B\#\w\w+\b/g
+    result = searchText.match(regexp);
+    if (result) {
+        a = []
+        result.forEach((tag) => {
+            a.push(tag.substring(1, tag.length))
+        })
+        return a
+    } else {
+        return []
+    }
 }
