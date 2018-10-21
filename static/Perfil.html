@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <style>
+    
     * {
         box-sizing: border-box;
     }
@@ -136,20 +137,20 @@
                               <h1>Image upload (requires login)</h1>
                               <input id="image-uploader" type="file" name="image" />
                               <input type="submit" value="Upload"/>
-                              <img src="" id="upload-demo">
+                              <div class="modal-body mx-3">
+                                <img src="" id="upload-demo" style="width:100%">
+                              </div>
                             </form>
                             <textarea id="upload-log"></textarea>
                         </div>
-                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>                        
+                                                
                     </div>
                 </div>
             </div>
 
 
-
-
     <!-- Navigator bar-->
-    <nav class="navbar navbar-default"  role="navigation"><!--data-spy="affix"-->
+    <nav class="navbar navbar-default" role="navigation"><!--data-spy="affix" para que siga el scroll-->
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="bs-example-navbar-collapse-1">
@@ -158,13 +159,13 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">
-          <img src="https://banner2.kisspng.com/20180619/lzz/kisspng-computer-icons-path-social-media-icon-design-socia-pinterest-icon-5b290b556ebc86.6588100715294165334536.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+          <img src="https://banner2.kisspng.com/20180619/lzz/kisspng-computer-icons-path-social-media-icon-design-socia-pinterest-icon-5b290b556ebc86.6588100715294165334536.jpg" width="35" height="30" class="d-inline-block align-top" alt="">
         </a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <div class="col-sm-3 col-md-3">
+      <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+        <div class="col-sm-6 col-md-6 pull-left">
             <form class="navbar-form">
               <div class="form-group" style="display:inline;">
                 <div class="input-group">
@@ -177,7 +178,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="active"><a href="#">Home</a></li>
           <li><a href="#">Following</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-user"></i>User</a></li>
+          <li><a href="#"><i class="glyphicon glyphicon-user"></i></a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><b class="caret"></b></a>
             <ul class="dropdown-menu">
@@ -211,27 +212,28 @@
     </nav>
 
     <!-- Photo Grid -->
-    <div class="row"> 
-      <div class="column">
-        <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-        <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
-        <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
+    <div class="container">
+      <div class="row"> 
+        <div id="columnaimagen1" class="column mx-3">
+          <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
+          <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
+          <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
+        </div>
+        <div id="columnaimagen2" class="column mx-3 mb-4">
+          <img src="https://i.pinimg.com/originals/b1/f5/bc/b1f5bcb29f3bd34a1a6748425a176ed4.jpg" style="width:100%">
+          <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
+          <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
+        </div>
+        <div id="columnaimagen3" class="column mx-3 mb-4">
+          <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
+          <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
+          <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
+        </div>
+        <div id="columnaimagen" class="column mx-3">
+          <img src="http://images2.fanpop.com/images/photos/3500000/CHIBI-ICHIGO-kurosaki-ichigo-3548045-450-600.jpg" style="width:100%">
+        </div>  
       </div>
-      <div class="column">
-        <img src="https://i.pinimg.com/originals/b1/f5/bc/b1f5bcb29f3bd34a1a6748425a176ed4.jpg" style="width:100%">
-        <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
-        <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
-      </div>
-      <div class="column">
-        <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-        <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
-        <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-      </div>
-      <div id="columnaimagen" class="column">
-        
-      </div>  
     </div>
-
     <div class="contenedor">
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
           <span>+</span>
