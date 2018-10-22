@@ -108,3 +108,28 @@ function findHashtags(searchText) {
         return []
     }
 }
+
+// Returns the image ids if an image contains a given hashtag
+exports.findByTag = function (req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    let tags = JSON.parse(req.body.tags)
+    let searchResult = []
+
+    Image.find().then((result) => {
+        result.forEach((image) => {
+            image.tag.forEach((tag) => {
+                tags.forEach((_tag) => {
+                    if (tag === _tag) {
+                        searchResult.push(image._id)
+                    }
+                })
+            })
+        })
+        res.json({
+            success: true,
+            images: searchResult
+        })
+    }).catch(console.error)
+}
