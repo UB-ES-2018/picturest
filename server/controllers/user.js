@@ -1,4 +1,5 @@
 var User = require('../models/user')
+var Image = require('../models/image')
 var jwt = require('jsonwebtoken')
 
 
@@ -15,7 +16,13 @@ exports.signup = function (req, res) {
         email: email,
         age: age,
         password: password,
-        username: username
+        username: username,
+        gender: "",
+        country: "",
+        language: "",
+        interests: [],
+        profile_img: ""
+
     })
 
     // saving into db
@@ -88,6 +95,43 @@ exports.logout = function (req, res, next) {
             }
         })
     }
+}
+
+exports.addProfileImg = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    var username = req.params.username
+    var image_id = req.body.imageId
+
+    Image.findOne({_id : image_id}).then((img) => {
+        if (img) {
+            User.findOne({ username: username }).then(function (user, err) {
+                if (user) {
+                    user.profile_img = image_id                    
+                    user.save().then(function (dbRes) {
+                        console.log('User updated to db with id:', dbRes._id)
+                        res.json({
+                            success: true,
+                            user_profile_img: dbRes._id
+                        })
+                    })
+                }
+                if (err) {
+                    res.json({
+                        success: false,
+                        error: "Cannot find user."
+                    })
+                }
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "Cannot find image."
+            })
+        }
+    }).catch((err) => { console.log(err) })
 }
 
 exports.middleware = function (app) {

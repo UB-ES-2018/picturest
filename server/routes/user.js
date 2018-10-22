@@ -9,6 +9,7 @@ module.exports = function (app) {
     // From now on all calls must be authenticated.
     user.middleware(app)
 
+    app.put('/addImg/:username', user.addProfileImg)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }
