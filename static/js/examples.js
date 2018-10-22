@@ -81,7 +81,6 @@ function upload() {
     let source = getImage(res.body.url)
 
     document.querySelector('#upload-demo').setAttribute('src', source)
-    document.querySelector('#upload-log').value = res.body.url
     var i = document.createElement("img")
     i.src= source;
     document.querySelector('#columnaimagen').appendChild(i);
