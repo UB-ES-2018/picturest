@@ -20,12 +20,7 @@ exports.signup = function (req, res) {
 
     // saving into db
     user.save(function (err, saved) {
-        if (err) {
-            res.json({
-                success: false,
-                error: "Someone already has this email address."
-            })
-        }
+        if (err) throw err
         if (saved) {
             // if OK sends true
             res.json({
@@ -40,12 +35,7 @@ exports.signup = function (req, res) {
 exports.login = function (req, res) {
     // find the user
     User.findOne({ email: req.body.email }).then(function (user, err) {
-        if (err) {
-            res.json({
-                success: false,
-                error: "Database error"
-            })
-        }
+        if (err) throw err
         if (!user) {
             res.json({ success: false, message: 'Authentication failed. User not found.' })
         } else if (user) {
