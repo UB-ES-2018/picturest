@@ -119,3 +119,17 @@ Response
     "imageId": _id
 }
 ```
+
+## Frontend
+
+### How to use
+
+- Para iniciar el uso de la pagina:
+
+-Una vez has iniciado el servidor, te diriges al servidor y te diriges a: 
+```localhost:3000/static/signup.html```
+
+-Una vez tienes tu cuenta utilizando el link bajo el signup o te diriges a:
+```localhost:3000/static/login.html```
+
+-Una vez dentro, la unica funcionalidad posible por ahora es la de subir la imagen con el boton localizado abajo a la derecha.
