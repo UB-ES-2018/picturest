@@ -10,5 +10,7 @@ module.exports = function (app) {
     app.get('/image/:imageId', image.downloadOne)
     app.get('/images/:tags', image.findByTag)
     app.post('/image/', image.uploadImage, image.upload)
-    app.post('/image/:imageTag', image.addTag)
+    app.put('/image/tag', image.addTag)
+    app.post('/image/tag', image.findByTag)
+
 }

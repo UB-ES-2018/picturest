@@ -50,7 +50,9 @@ exports.downloadAll = function (req, res) {
             final.push({
                 url : 'http://localhost:3000/download/' + img._id,
                 user : img.user,
-                name : img.name
+                name : img.name,
+                description : img.description,
+                tag : img.tag
             })
         })
         res.json(final)
@@ -72,12 +74,18 @@ exports.downloadOne = function(req, res) {
 exports.addTag = function (req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
+    let imageId = req.body.imageId
+    let desc = req.body.desc
+    let tags = []
 
-    let imageId = req.params.imageId
-    let tag = req.tag
-    console.log(token)
+    tags = findHashtags(desc)
+    
+    console.debug(desc)
+    console.log(tags)
+
     Image.findOne({_id : imageId}).then(function(img) {
-        img.tag.push(tag)
+        img.description = desc
+        img.tag = tags
         img.save().then(function (dbRes) {
             console.log('Image updated to db with id:', dbRes._id)
             res.json({url: 'http://localhost:3000/image/' + dbRes._id})
@@ -86,34 +94,42 @@ exports.addTag = function (req, res) {
     .catch(console.error)
 }
 
-
-// Find images by tag
-exports.findByTag = function (req, res) {
-     
-    Image.find().then(function(results) {
-        let tag_string = req.params.tag
-        let tags = []
-
-        var res = tag_string.split(" ");
-        for (i = 0; i < res.length ; i++){
-    	    if (res[i].indexOf('#') > -1 ) {
-        	    tag = res[i].replace("#", "")
-        	    tags.push(tag)
-            }
-        }
-
-        let matches = []
-        results.forEach(function(img) {
-            for (i = 0; i < img.tag.length; i++){
-                if (tags.includes(i)){
-                    matches.push({
-                        url : 'http://localhost:3000/download/' + img._id,
-                        user : img.user,
-                        name : img.name
-                    })
-                }
-            }
+// Finds hashtags
+function findHashtags(searchText) {
+    var regexp = /\B\#\w\w+\b/g
+    result = searchText.match(regexp);
+    if (result) {
+        a = []
+        result.forEach((tag) => {
+            a.push(tag.substring(1, tag.length))
         })
-        res.json(matches)
-    })
+        return a
+    } else {
+        return []
+    }
+}
+
+// Returns the image ids if an image contains a given hashtag
+exports.findByTag = function (req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    let tags = JSON.parse(req.body.tags)
+    let searchResult = []
+
+    Image.find().then((result) => {
+        result.forEach((image) => {
+            image.tag.forEach((tag) => {
+                tags.forEach((_tag) => {
+                    if (tag === _tag) {
+                        searchResult.push(image._id)
+                    }
+                })
+            })
+        })
+        res.json({
+            success: true,
+            images: searchResult
+        })
+    }).catch(console.error)
 }
