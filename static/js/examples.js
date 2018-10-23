@@ -103,6 +103,52 @@ function download() {
 
 }
 
+function getImageByTag(){
+  let formDom = document.querySelector('#tag')
+
+  let encType = formDom.getAttribute('x-enctype')
+  let target = formDom.getAttribute('x-target')
+  let method = formDom.getAttribute('x-method')
+
+  let data = {}
+
+  let form = new FormData(formDom)
+
+  let tags = form.get('search');
+  
+  data = {
+    tags : tags.split('#')
+  }
+
+  console.log('Tags', data)
+
+  superagent
+  .post(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    text = ""
+    imgs = res.body.images
+    ilen= imgs.length
+
+    for (l=0; l<ilen ; l++){
+      let source = getImage(imgs[l])
+      //document.querySelector('#upload-demo').setAttribute('src', source)
+      //document.querySelector('#upload-log').value = res.body.url
+      var i = document.createElement("img")
+      i.src= source;
+      i.style.cssText = 'width:100%'
+      document.querySelector('#columnaimagen').appendChild(i);
+    }
+    
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -125,4 +171,6 @@ function getCookie(cname) {
     }
     return "";
 }
+
+
 //
