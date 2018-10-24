@@ -166,11 +166,11 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
         <div class="col-sm-6 col-md-6 pull-left">
-            <form class="navbar-form">
+            <form id="tag" x-target="/image/tag" x-method="post" action="javascript:getImageByTag()" x-enctype="application/x-www-form-urlencoded" class="navbar-form">
               <div class="form-group" style="display:inline;">
                 <div class="input-group">
                   <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                  <input class="form-control" name="search" placeholder="Search Here" autocomplete="off" autofocus="autofocus" type="text" size="100">
+                  <input class="form-control" name="search" placeholder="Search Here" autocomplete="off" autofocus="autofocus" type="text" size=100>
                 </div>
               </div>
             </form>
