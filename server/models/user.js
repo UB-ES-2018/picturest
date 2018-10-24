@@ -43,6 +43,10 @@ var UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    profile_img: {
+        type: String,
+        trim: true
     }
 })
 
