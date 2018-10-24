@@ -139,19 +139,20 @@
                             <div class="row col-md-6">
                                 <form id="image-upload" method="" x-target="/image" x-method="post" action="javascript:upload()" x-enctype="multipart/form-data" class="dropzone">
                                     <div class="fallback">
-                                        <input name="file" type="file" multiple />
-                                    </div>                                
-                                </form>
+                                        <input id="image-uploader" name="image" type="file" multiple />
+                                    </div>
                             </div>
                             <div class="col-md-6">
                                 <span>Description</span>
-                                <textarea aria-invalid="false" style="resize:none" placeholder="Say more about this Pin" rows="6" cols="30"></textarea>
+                                <textarea id ="image-desciption" aria-invalid="false" style="resize:none" placeholder="Say more about this Pin" rows="6" cols="30"></textarea>
                             </div>
                         </div>
                     </div>  
                     <div class="modal-footer">
-                            <input type="submit">
-                    </div>                     
+                        <input type="submit">
+                    </div>        
+                                                    
+                </form>             
                 </div>
             </div>
         </div>
