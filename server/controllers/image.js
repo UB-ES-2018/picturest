@@ -50,7 +50,9 @@ exports.downloadAll = function (req, res) {
             final.push({
                 url : 'http://localhost:3000/download/' + img._id,
                 user : img.user,
-                name : img.name
+                name : img.name,
+                description : img.description,
+                tag: img.tag
             })
         })
         res.json(final)
