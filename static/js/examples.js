@@ -105,6 +105,7 @@ function download() {
 
 function getImageByTag(){
   let formDom = document.querySelector('#tag')
+  let token = getCookie("token")
 
   let encType = formDom.getAttribute('x-enctype')
   let target = formDom.getAttribute('x-target')
@@ -114,29 +115,32 @@ function getImageByTag(){
 
   let form = new FormData(formDom)
 
-  let tags = form.get('search');
+  let mytags = form.get('search');
   
+  mytags = mytags.split('#')
+  mytags.shift()
+  var myJson = JSON.stringify(mytags)
+
   data = {
-    tags : tags.split('#')
+    tags : myJson
   }
 
   console.log('Tags', data)
 
   superagent
   .post(basePath + target)
-  .set('x-access-token', token)
+  //.set('x-access-token', token)
   .set('Content-Type', encType)
   .set('Accept', 'application/json')
   .send(data)
   .then(function(res) {
-    text = ""
-    imgs = res.body.images
-    ilen= imgs.length
+    let imgs = res.body.images
+    console.log(imgs)
+    let ilen= imgs.length
 
-    for (l=0; l<ilen ; l++){
-      let source = getImage(imgs[l])
-      //document.querySelector('#upload-demo').setAttribute('src', source)
-      //document.querySelector('#upload-log').value = res.body.url
+    for (let l=0; l<ilen ; l++){
+      let source = basePath +"/image/"+ imgs[l]
+      console.log("-------",source)
       var i = document.createElement("img")
       i.src= source;
       i.style.cssText = 'width:100%'
