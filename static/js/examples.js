@@ -84,6 +84,7 @@ function upload() {
     document.querySelector('#upload-log').value = res.body.url
     var i = document.createElement("img")
     i.src= source;
+    i.style.cssText = 'width:100%'
     document.querySelector('#columnaimagen').appendChild(i);
 
   })
@@ -100,6 +101,56 @@ function download() {
   document.querySelector('#download-demo').setAttribute('src', source)
   document.querySelector('#download-log').value = source
 
+}
+
+function getImageByTag(){
+  let formDom = document.querySelector('#tag')
+  let token = getCookie("token")
+
+  let encType = formDom.getAttribute('x-enctype')
+  let target = formDom.getAttribute('x-target')
+  let method = formDom.getAttribute('x-method')
+
+  let data = {}
+
+  let form = new FormData(formDom)
+
+  let mytags = form.get('search');
+  
+  mytags = mytags.split('#')
+  mytags.shift()
+  var myJson = JSON.stringify(mytags)
+
+  data = {
+    tags : myJson
+  }
+
+  console.log('Tags', data)
+
+  superagent
+  .post(basePath + target)
+  //.set('x-access-token', token)
+  .set('Content-Type', encType)
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    let imgs = res.body.images
+    console.log(imgs)
+    let ilen= imgs.length
+
+    for (let l=0; l<ilen ; l++){
+      let source = basePath +"/image/"+ imgs[l]
+      console.log("-------",source)
+      var i = document.createElement("img")
+      i.src= source;
+      i.style.cssText = 'width:100%'
+      document.querySelector('#columnaimagen').appendChild(i);
+    }
+    
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -124,4 +175,6 @@ function getCookie(cname) {
     }
     return "";
 }
+
+
 //
