@@ -11,5 +11,4 @@ module.exports = function (app) {
     app.post('/image/', image.uploadImage, image.upload)
     app.put('/image/tag', image.addTag)
     app.post('/image/tag', image.findByTag)
-
 }
