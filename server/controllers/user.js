@@ -134,6 +134,36 @@ exports.addProfileImg = function(req, res) {
     }).catch((err) => { console.log(err) })
 }
 
+exports.addProfileDesc = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    let email = decodedToken.email
+    let description = req.body.desc
+
+    // find the user
+    User.findOne({ email: email }).then(function (user, err) {
+        if (err) {
+            res.json({
+                success: false,
+                error: "Database error"
+            })
+        }
+        if (!user) {
+            res.json({ success: false, message: 'Token decode failed. User not found.' })
+        } else if (user) {
+            // Update user description
+            user.profile_desc = description
+            res.json({
+                success: true,
+                desc: description
+            })
+        }
+    }).catch(function (err) {
+        console.log(err)
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {

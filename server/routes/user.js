@@ -10,6 +10,7 @@ module.exports = function (app) {
     user.middleware(app)
 
     app.put('/addImg/:username', user.addProfileImg)
+    app.put('/addDesc/:username', user.addProfileDesc)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }
