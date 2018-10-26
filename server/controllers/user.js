@@ -154,10 +154,14 @@ exports.addProfileDesc = function(req, res) {
         } else if (user) {
             // Update user description
             user.profile_desc = description
-            res.json({
-                success: true,
-                desc: description
+            user.save().then(function (dbRes) {
+                console.log('User updated to db with id:', dbRes._id)
+                res.json({
+                    success: true,
+                    desc: description
+                })
             })
+
         }
     }).catch(function (err) {
         console.log(err)
