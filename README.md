@@ -120,6 +120,23 @@ Response
 }
 ```
 
+- Add profile description: ```PUT /addDesc```
+Request body:
+```
+{
+    "desc": <String>,
+    "token": "Token provided on login"
+}
+```
+Response
+```
+{
+    "success": true,
+    "desc": Description
+}
+```
+
+
 ## Frontend
 
 ### How to use
