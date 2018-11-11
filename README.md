@@ -149,6 +149,21 @@ Response
     "success": true,
  }
 ```
+- Download pinned images: ```GET /user/downloadPinned```
+Request headers (example):
+```x-access-token: 435f4w3f...43t423g234
+```
+Response
+```
+{
+    "success": true,
+    "pins: [
+        imageId,
+        imageId2,
+        ...
+    ]
+ }
+```
 
 
 ## Frontend
