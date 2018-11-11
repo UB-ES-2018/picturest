@@ -136,6 +136,20 @@ Response
 }
 ```
 
+- Pin picture: ```PUT /user/pin/:imageId```
+Request body:
+```
+{
+    "token": "Token provided on login"
+}
+```
+Response
+```
+{
+    "success": true,
+ }
+```
+
 
 ## Frontend
 
