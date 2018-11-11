@@ -48,6 +48,11 @@ var UserSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    profile_desc: {
+        type: String,
+        required: false,
+        trim: true
+    },
     pins: {
         type: [String],
         trim: true
