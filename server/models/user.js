@@ -60,7 +60,7 @@ var UserSchema = new mongoose.Schema({
 })
 
 
-// Hashing a password before saving it to the database 
+// Hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {
     var user = this
     // Only hash the password if it has been modified (or is new)

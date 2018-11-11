@@ -101,6 +101,7 @@ exports.addProfileImg = function(req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
 
+
     var email = decodedToken.email
     var image_id = req.body.imageId
 
@@ -137,8 +138,10 @@ exports.addProfileImg = function(req, res) {
 exports.addProfileDesc = function(req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
+
     let email = decodedToken.email
     let description = req.body.desc
+
     // find the user
     User.findOne({ email: email }).then(function (user, err) {
         if (err) {
@@ -229,4 +232,3 @@ exports.middleware = function (app) {
         }
     })
 }
-  
