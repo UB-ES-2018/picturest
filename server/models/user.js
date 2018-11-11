@@ -54,8 +54,7 @@ var UserSchema = new mongoose.Schema({
         trim: true
     },
     pins: {
-        type: [String],
-        trim: true
+        type: [String]
     }
 })
 
