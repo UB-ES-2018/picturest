@@ -151,7 +151,9 @@ Response
 ```
 - Download pinned images: ```GET /user/downloadPinned```
 Request headers (example):
-```x-access-token: 435f4w3f...43t423g234
+
+```
+x-access-token: 435f4w3f...43t423g234
 ```
 Response
 ```
