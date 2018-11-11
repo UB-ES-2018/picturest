@@ -101,7 +101,8 @@ exports.addProfileImg = function(req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
 
-    var email = decodedToken.email;
+
+    var email = decodedToken.email
     var image_id = req.body.imageId
 
     Image.findOne({_id : image_id}).then((img) => {
@@ -161,10 +162,47 @@ exports.addProfileDesc = function(req, res) {
                     desc: description
                 })
             })
-
         }
     }).catch(function (err) {
         console.log(err)
+    })
+}
+
+exports.pinImage = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    var email = decodedToken.email
+    var image_id = req.params.imageId
+
+    Image.findOne({_id: image_id}).then((img) => {
+        if (img) {
+            User.findOne({email: email}).then((user, err) => {
+                if (user) {
+                    user.pins.push(image_id)
+                    user.save().then(function (dbRes) {
+                        console.log('User updated to db with id:', dbRes._id)
+                        res.json({
+                            success: true
+                        })
+                    })
+                }
+                if (err) {
+                    res.json({
+                        success: false,
+                        error: "Cannot find user."
+                    })
+                }
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "Cannot find image."
+            })
+        }
+    }).catch((err) => { 
+        console.log(err) 
     })
 }
 

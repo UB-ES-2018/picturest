@@ -11,6 +11,7 @@ module.exports = function (app) {
 
     app.put('/addImg/:username', user.addProfileImg)
     app.put('/addDesc', user.addProfileDesc)
+    app.put('/user/pin/:imageId', user.pinImage)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }
