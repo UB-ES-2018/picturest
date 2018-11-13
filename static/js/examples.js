@@ -15,11 +15,11 @@ function submitForm(formId) {
 
   if (formId === 'signup'){
     let form = new FormData(formDom)
-
+    
     let email = form.get('email')
     let password = form.get('password')
     let age = form.get('age')
-
+    
     data = {
       email : email,
       password : password,
@@ -55,16 +55,17 @@ function submitForm(formId) {
       token = res.body.token
     }
     
-    if(formId=='login'){
+    if(formId=='login' && res.body.token){
       document.cookie = setCookie("token",token,1);
       window.location = "Perfil.html"
     }
-    document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
+    //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
+    console.log(JSON.stringify(res.body))
     
   })
   .catch(function(e) {
     console.error(e)
-    document.querySelector('#' + formId + '-log').value = JSON.stringify(e)
+    //document.querySelector('#' + formId + '-log').value = JSON.stringify(e)
   })
 }
 
