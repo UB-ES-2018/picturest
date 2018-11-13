@@ -1,4 +1,3 @@
-
 module.exports = function (app) {
     var user = require('../controllers/user')
 

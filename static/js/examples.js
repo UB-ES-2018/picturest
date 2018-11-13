@@ -176,5 +176,36 @@ function getCookie(cname) {
     return "";
 }
 
+// Funció per que l'usuari ja loguejat pugui pinejar una imatge. 
+function pinImage(url){
+  
+  //FIXME: GetCookie(token) returning empty token
+  let token = getCookie('token');
+
+  
+  //let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViZWFlNWNhN2NmYWJlNGM3MjkxODMzYSIsImVtYWlsIjoiMTIzNDVAYS5jb20iLCJpYXQiOjE1NDIxMjEwNTksImV4cCI6MTU0MjIwNzQ1OX0.Kngc28sS7qMLfIOws3UA8QQ9nF1JMzioqWNxBEFP7Wg';
+  console.log(token);
+
+  //FIXME: Image id hardcoded because the images in the frontend grid are not stored in the db of the user.
+  //let x = '5beae72c7cfabe4c7291833b';
+  let src = url;
+  let x = document.getElementsByClassName("img-responsive")[0].id;
+
+  //console.log("THIS IS THE ENTERED IMAGE:", src);
+  //console.log("THIS IS THE ENTERED IMAGE ID: ", x);
+
+  superagent
+  .put(basePath + '/user/pin/' + x)
+  .set('x-access-token', token)
+  .field('token', token)
+  .then(res => {
+    window.alert('Image pinned successfully')
+    console.log(JSON.stringify(res.body))
+  }).catch(e => {
+    console.log(e.message)
+  });
+
+}
+
 
 //
