@@ -48,14 +48,18 @@ var UserSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    pins: {
-        type: [String],
+    profile_desc: {
+        type: String,
+        required: false,
         trim: true
+    },
+    pins: {
+        type: [String]
     }
 })
 
 
-// Hashing a password before saving it to the database 
+// Hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {
     var user = this
     // Only hash the password if it has been modified (or is new)
