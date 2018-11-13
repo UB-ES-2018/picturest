@@ -47,6 +47,10 @@ var UserSchema = new mongoose.Schema({
     profile_img: {
         type: String,
         trim: true
+    },
+    pins: {
+        type: [String],
+        trim: true
     }
 })
 
