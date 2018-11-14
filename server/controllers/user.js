@@ -1,7 +1,8 @@
+
 var User = require('../models/user')
 var Image = require('../models/image')
 var jwt = require('jsonwebtoken')
-
+var mongoose = require('mongoose')
 
 // registers new user
 exports.signup = function (req, res) {
@@ -28,6 +29,7 @@ exports.signup = function (req, res) {
     // saving into db
     user.save(function (err, saved) {
         if (err) {
+            console.log(err)
             res.json({
                 success: false,
                 error: "Someone already has this email address."
@@ -101,12 +103,13 @@ exports.addProfileImg = function(req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
 
-    var username = req.params.username
+
+    var email = decodedToken.email
     var image_id = req.body.imageId
 
     Image.findOne({_id : image_id}).then((img) => {
         if (img) {
-            User.findOne({ username: username }).then(function (user, err) {
+            User.findOne({ email: email }).then(function (user, err) {
                 if (user) {
                     user.profile_img = image_id                    
                     user.save().then(function (dbRes) {
@@ -134,6 +137,119 @@ exports.addProfileImg = function(req, res) {
     }).catch((err) => { console.log(err) })
 }
 
+exports.addProfileDesc = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    let email = decodedToken.email
+    let description = req.body.desc
+
+    // find the user
+    User.findOne({ email: email }).then(function (user, err) {
+        if (err) {
+            res.json({
+                success: false,
+                error: "Database error"
+            })
+        }
+        if (!user) {
+            res.json({ success: false, message: 'Token decode failed. User not found.' })
+        } else if (user) {
+            // Update user description
+            user.profile_desc = description
+            user.save().then(function (dbRes) {
+                console.log('User updated to db with id:', dbRes._id)
+                res.json({
+                    success: true,
+                    desc: description
+                })
+            })
+        }
+    }).catch(function (err) {
+        console.log(err)
+    })
+}
+
+exports.pinImage = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    this.res = res;
+    var email = decodedToken.email
+    var image_id = req.params.imageId
+
+    Image.findOne({_id: image_id}).then((img) => {
+        if (img) {
+            User.findOne({email: email}).then((user, err) => {
+                if (user) {
+                    if (!user.pins.includes(image_id)) {
+                        let pins = user.pins
+                        pins.push(image_id)
+                        User.update({email: email}, {$set: {
+                            pins: pins
+                        }}, function(err, res) {
+                            if (err) {
+                                console.log(err)
+                                this.res.json({
+                                    success: false
+                                })
+                            }
+                            if (err) {
+                                console.log(res)
+                                this.res.json({
+                                    success: true
+                                })
+                            }
+                        })
+                    }
+                    else (
+                        res.json({
+                            success: true
+                        })
+                    ) 
+                }
+                else {
+                    console.log(err)
+                    res.json({
+                        success: false,
+                        error: "Cannot find user."
+                    })
+                }
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "Cannot find image."
+            })
+        }
+    }).catch((err) => { 
+        console.log(err) 
+    })
+}
+
+exports.downloadPinned = function (req, res) {
+    var token = req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    let email = decodedToken.email
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            res.json({
+                success: true,
+                pins: user.pins
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "Cannot find user."
+            })
+        }
+    })
+}
+
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {
@@ -160,4 +276,3 @@ exports.middleware = function (app) {
         }
     })
 }
-  

@@ -1,4 +1,3 @@
-
 module.exports = function (app) {
     var user = require('../controllers/user')
 
@@ -10,6 +9,9 @@ module.exports = function (app) {
     user.middleware(app)
 
     app.put('/addImg/:username', user.addProfileImg)
+    app.put('/addDesc', user.addProfileDesc)
+    app.put('/user/pin/:imageId', user.pinImage)
+    app.get('/user/downloadPinned', user.downloadPinned)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }
