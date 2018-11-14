@@ -15,11 +15,11 @@ function submitForm(formId) {
 
   if (formId === 'signup'){
     let form = new FormData(formDom)
-    
+
     let email = form.get('email')
     let password = form.get('password')
     let age = form.get('age')
-    
+
     data = {
       email : email,
       password : password,
@@ -55,24 +55,22 @@ function submitForm(formId) {
       token = res.body.token
     }
     
-    if(formId=='login' && res.body.token){
+    if(formId=='login'){
       document.cookie = setCookie("token",token,1);
       window.location = "Perfil.html"
     }
-    //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
-    console.log(JSON.stringify(res.body))
+    document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
     
   })
   .catch(function(e) {
     console.error(e)
-    //document.querySelector('#' + formId + '-log').value = JSON.stringify(e)
+    document.querySelector('#' + formId + '-log').value = JSON.stringify(e)
   })
 }
 
 function upload() {
   let file = document.querySelector('#image-uploader').files[0]
   let token = getCookie("token")
-  let text = document.querySelector('#image-description').value
 
   superagent
   .post('http://localhost:3000/image')
@@ -82,40 +80,14 @@ function upload() {
   .then(function(res) {
     let source = getImage(res.body.url)
 
-    getTag(res.body.imageId, text)
-
     document.querySelector('#upload-demo').setAttribute('src', source)
+    document.querySelector('#upload-log').value = res.body.url
     var i = document.createElement("img")
     i.src= source;
     i.style.cssText = 'width:100%'
     document.querySelector('#columnaimagen').appendChild(i);
 
   })
-}
-
-function getTag(id, text){
-  let token = getCookie("token")
-
-  let data = {}
-
-  data = {
-      imageId : id,
-      desc : text
-  }
-
-  superagent
-  .put('http://localhost:3000/image/tag')
-  .set('x-access-token', token)
-  .set('Content-Type','application/x-www-form-urlencoded')
-  .set('Accept', 'application/json')
-  .send(data)
-  .then(function(res) {
-    console.log('url', res.body.url)
-  })
-  .catch(function(e) {
-    console.error(e)
-  })
-  
 }
 
 function getImage(url) {
@@ -202,37 +174,6 @@ function getCookie(cname) {
         }
     }
     return "";
-}
-
-// Funció per que l'usuari ja loguejat pugui pinejar una imatge. 
-function pinImage(url){
-  
-  //FIXME: GetCookie(token) returning empty token
-  let token = getCookie('token');
-
-  
-  //let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViZWFlNWNhN2NmYWJlNGM3MjkxODMzYSIsImVtYWlsIjoiMTIzNDVAYS5jb20iLCJpYXQiOjE1NDIxMjEwNTksImV4cCI6MTU0MjIwNzQ1OX0.Kngc28sS7qMLfIOws3UA8QQ9nF1JMzioqWNxBEFP7Wg';
-  console.log(token);
-
-  //FIXME: Image id hardcoded because the images in the frontend grid are not stored in the db of the user.
-  //let x = '5beae72c7cfabe4c7291833b';
-  let src = url;
-  let x = document.getElementsByClassName("img-responsive")[0].id;
-
-  //console.log("THIS IS THE ENTERED IMAGE:", src);
-  //console.log("THIS IS THE ENTERED IMAGE ID: ", x);
-
-  superagent
-  .put(basePath + '/user/pin/' + x)
-  .set('x-access-token', token)
-  .field('token', token)
-  .then(res => {
-    window.alert('Image pinned successfully')
-    console.log(JSON.stringify(res.body))
-  }).catch(e => {
-    console.log(e.message)
-  });
-
 }
 
 
