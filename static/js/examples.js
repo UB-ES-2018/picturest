@@ -72,9 +72,7 @@ function submitForm(formId) {
 function upload() {
   let file = document.querySelector('#image-uploader').files[0]
   let token = getCookie("token")
-  //let text = document.querySelector('#image-description')
-
-  console.log("hola")
+  let text = document.querySelector('#image-description').value
 
   superagent
   .post('http://localhost:3000/image')
@@ -84,7 +82,7 @@ function upload() {
   .then(function(res) {
     let source = getImage(res.body.url)
 
-    //let resTag = getTag(res.body.url, text)
+    getTag(res.body.imageId, text)
 
     document.querySelector('#upload-demo').setAttribute('src', source)
     var i = document.createElement("img")
@@ -97,12 +95,13 @@ function upload() {
 
 function getTag(id, text){
   let token = getCookie("token")
+
+  let data = {}
+
   data = {
       imageId : id,
       desc : text
   }
-  console.log("hola")
-  console.log(data)
 
   superagent
   .put('http://localhost:3000/image/tag')
