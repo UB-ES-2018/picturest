@@ -269,19 +269,21 @@ transform:translatey(0);
     </nav>
 
     <div>
-      <form id="image-user" method="" x-target="/image/:username" x-method="put" action="javascript:()" x-enctype="multipart/form-data" class="box">
+      <form id="image-user" method="" x-target="/image" x-method="post" action="javascript:imgUser()" x-enctype="multipart/form-data" class="box">
         <h1>Picture User</h1>
-        <input id="image-uploader" type="file" name="image" />
+        <input id="image-uploader-user" type="file" name="image" />
         <input type="submit" value="Upload"/>
-        <img src="" id="upload-demo">
+        <img src="" id="upload-demo-user">
       </form>
     </div>
+
     <br></br>
+    
     <div>
-      <form id="description-user" method="" x-target="/" x-method="" action="javascript:descUser()" x-enctype="application/x-www-form-urlencoded" class="box">
+      <form id="description-user"  method="" x-target="/addDesc" x-method="put" action="javascript:descUser()" x-enctype="application/x-www-form-urlencoded" class="box">
         <input type="submit">
       </form>
-      <textarea rows="4" cols="50" name="desc" form="description-user"></textarea>
+      <textarea rows="4" cols="50" name="desc-user" form="description-user"></textarea>
     </div>
     
     <div class="contenedor">
