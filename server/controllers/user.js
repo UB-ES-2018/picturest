@@ -116,7 +116,8 @@ exports.addProfileImg = function(req, res) {
                         console.log('User updated to db with id:', dbRes._id)
                         res.json({
                             success: true,
-                            user_profile_img: dbRes._id
+                            user_profile_img: dbRes._id,
+                            id: user._id
                         })
                     })
                 }
@@ -161,7 +162,8 @@ exports.addProfileDesc = function(req, res) {
                 console.log('User updated to db with id:', dbRes._id)
                 res.json({
                     success: true,
-                    desc: description
+                    desc: description,
+                    id: user._id
                 })
             })
         }
@@ -194,17 +196,21 @@ exports.pinImage = function(req, res) {
                                     success: false
                                 })
                             }
-                            if (err) {
+                            if (res) {
                                 console.log(res)
                                 this.res.json({
-                                    success: true
+                                    success: true,
+                                    id: user._id,
+                                    image: image_id
                                 })
                             }
                         })
                     }
                     else (
                         res.json({
-                            success: true
+                            success: true,
+                            id: user._id,
+                            image: image_id
                         })
                     ) 
                 }
@@ -237,7 +243,8 @@ exports.downloadPinned = function (req, res) {
         if (user) {
             res.json({
                 success: true,
-                pins: user.pins
+                pins: user.pins,
+                id: user._id
             })
         }
         if (err) {
