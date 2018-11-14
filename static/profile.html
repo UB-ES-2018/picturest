@@ -173,42 +173,36 @@ transform:translatey(0);
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="js/superagent.js"></script>
         <script src="js/examples.js"></script>
-        <!--DRAG & DROP-->
-        <script src="js/dropzone.js"></script>
-        <link rel="stylesheet" href="css/dropzone.css">
-        <link rel="stylesheet" href="css/basic.css">
+        
     </head>
 
-    <body>
+    <body onload="cargarUser()">
+
         
         <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
 
-                    <div class="modal-header text-center">
-                        <h1 class="h3 mb-3 font-weight-normal">Upload Image</h1>
-                        <div id="respuesta"> </div>
-                    </div>
-
-                    <div class="modal-body mx-3">
-                        <form id="image-upload" method="" x-target="/image" x-method="post" action="javascript:upload()" x-enctype="multipart/form-data" class="box">
-                          <h1>Image upload (requires login)</h1>
-                          <input id="image-uploader" type="file" name="image" />
-                          <input type="submit" value="Upload"/>
-                          <div class="modal-body mx-3">
-                            <img src="" id="upload-demo" style="width:100%">
-                          </div>
-
-                          <div class="col-md-6">
-                            <span>Description</span>
-                            <textarea id ="image-description" aria-invalid="false" style="resize:none" placeholder="Say more about this Pin" rows="6" cols="30"></textarea>
+                        <div class="modal-header text-center">
+                            <h1 class="h3 mb-3 font-weight-normal">Upload Image</h1>
+                            <div id="respuesta"> </div>
                         </div>
-                        </form>
+
+                        <div class="modal-body mx-3">
+                            <form id="image-upload" method="" x-target="/image" x-method="post" action="javascript:upload()" x-enctype="multipart/form-data" class="box">
+                              <h1>Image upload (requires login)</h1>
+                              <input id="image-uploader" type="file" name="image" />
+                              <input type="submit" value="Upload"/>
+                              <div class="modal-body mx-3">
+                                <img src="" id="upload-demo" style="width:100%">
+                              </div>
+                            </form>
+                            <textarea id="upload-log"></textarea>
+                        </div>
+                                                
                     </div>
-                                            
                 </div>
             </div>
-        </div>
 
 
     <!-- Navigator bar-->
@@ -274,82 +268,6 @@ transform:translatey(0);
       </div><!-- /.navbar-collapse -->
     </nav>
 
-    <!-- Photo Grid -->
-    <div class="container">
-      <div class="row"> 
-        <div id="columnaimagen1" class="column mx-3">
-          <div class="hover">
-            <img class="img-responsive" src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%" id="imatgeprova">
-            <div class="overlay">
-              <!-- PROVA!! -->
-              <!-- PROVA!! -->
-              <!-- AQUESTA ES LA PRIMERA FOTO (ADALT A L'ESQUERRA) -->
-              <a onclick="pinImage(imatgeprova)"  href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-        </div>
-        <div id="columnaimagen2" class="column mx-3 mb-4">
-          <div class="hover">
-            <img src="https://i.pinimg.com/originals/b1/f5/bc/b1f5bcb29f3bd34a1a6748425a176ed4.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-        </div>
-        <div id="columnaimagen3" class="column mx-3 mb-4">
-          <div class="hover">
-            <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-        </div>
-        <div id="columnaimagen" class="column mx-3">
-          <div class="hover">
-            <img src="http://images2.fanpop.com/images/photos/3500000/CHIBI-ICHIGO-kurosaki-ichigo-3548045-450-600.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-        </div>  
-      </div>
-    </div>
     <div class="contenedor">
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
           <span>+</span>

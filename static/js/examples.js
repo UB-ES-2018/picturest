@@ -3,6 +3,7 @@
 const basePath = 'http://localhost:3000'
 
 let token = ''
+let aux = ''
 
 function submitForm(formId) {
   let formDom = document.querySelector('#' + formId)
@@ -32,7 +33,8 @@ function submitForm(formId) {
 
     let email = form.get('email')
     let password = form.get('password')
-
+    aux = email.split("@")[0]
+    
     data = {
       email : email,
       password : password
@@ -57,6 +59,7 @@ function submitForm(formId) {
     
     if(formId=='login' && res.body.token){
       document.cookie = setCookie("token",token,1);
+      document.cookie = setCookie("username",aux,1);
       window.location = "Perfil.html"
     }
     //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
@@ -169,16 +172,127 @@ function getImageByTag(){
     for (let l=0; l<ilen ; l++){
       let source = basePath +"/image/"+ imgs[l]
       console.log("-------",source)
-      var i = document.createElement("img")
+      
+      var d = document.createElement("div");
+      d.className = "hover";
+      
+      var i = document.createElement("img");
       i.src= source;
       i.style.cssText = 'width:100%'
-      document.querySelector('#columnaimagen').appendChild(i);
+    
+      var d2 = document.createElement("div");
+      d2.className = "overlay";
+    
+      var a = document.createElement("a");
+      a.className = "btn btn-primary btn-danger"
+      a.setAttribute('href','#');
+      var idImg= 'pinImage('+ imgs[l] + ')';
+      a.setAttribute('onclick',idImg);
+
+      var s = document.createElement("span");
+      s.className = "glyphicon glyphicon-pushpin"
+    
+      var pin = document.createTextNode("Pin");
+    
+      a.appendChild(s);
+      a.appendChild(pin);
+      d2.appendChild(a);
+      d.appendChild(i);
+      d.appendChild(d2);
+      
+      document.querySelector('#columnaimagen').appendChild(d);
     }
     
   })
   .catch(function(e) {
     console.error(e)
   })
+}
+
+function imgUser(){
+  let file = document.querySelector('#image-uploader-user').files[0]
+  let token = getCookie("token")
+  
+  superagent
+  .post('http://localhost:3000/image')
+  .set('x-access-token', token)
+  .field('token', token)
+  .attach('image', file, file.name)
+  .then(function(res) {
+    let source = getImage(res.body.url)
+    document.querySelector('#upload-demo-user').setAttribute('src', source)
+    sendUserPic(res.body.imageId)
+  })
+}
+
+function sendUserPic(idImg){
+  let token = getCookie("token")
+
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/image/"
+  let userID = getCookie("username")
+  let data = {}
+  console.log(token)
+  data = {
+    imageId : idImg,
+    token : token
+  }
+
+  superagent
+  .put(basePath + target + userID)
+  //.set('x-access-token', token)
+  .set('Content-Type', encType)
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    alert("se ha subido tu imagen de perfil")
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function descUser(){
+  let token = getCookie("token")
+  let formDom = document.querySelector('#description-user')
+
+  let encType = formDom.getAttribute('x-enctype')
+  let target = formDom.getAttribute('x-target')
+  let method = formDom.getAttribute('x-method')
+
+  let data = {}
+
+  let form = new FormData(formDom)
+
+  let desc = form.get('desc-user')
+
+  data = {
+    desc : desc
+  }
+
+  console.log('token', token)
+  console.log('encType', encType)
+  console.log('target', basePath + target)
+  console.log('data', data)
+
+  superagent
+  .put(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    alert("se ha subido la descripcion")
+    //console.log(JSON.stringify(res.body))
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function cargarUser(){
+
+
 }
 
 function setCookie(cname, cvalue, exdays) {
