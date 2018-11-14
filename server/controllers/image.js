@@ -38,7 +38,7 @@ exports.upload = function (req, res) {
 
     dbImage.save().then(function(dbRes) {
         console.log('Image uploaded to db with id:', dbRes._id)
-        res.json({url : 'http://localhost:3000/image/' + dbRes._id, imageId: dbImage._id})
+        res.json({url : 'http://localhost:3000/image/' + dbRes._id})
     })
 }
 
