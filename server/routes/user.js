@@ -1,4 +1,3 @@
-
 module.exports = function (app) {
     var user = require('../controllers/user')
 
@@ -9,6 +8,10 @@ module.exports = function (app) {
     // From now on all calls must be authenticated.
     user.middleware(app)
 
+    app.put('/addImg/:username', user.addProfileImg)
+    app.put('/addDesc', user.addProfileDesc)
+    app.put('/user/pin/:imageId', user.pinImage)
+    app.get('/user/downloadPinned', user.downloadPinned)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }
