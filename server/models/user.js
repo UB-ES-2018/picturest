@@ -32,7 +32,7 @@ var UserSchema = new mongoose.Schema({
         trim: true
     },
     interests: {
-        type: [Number],
+        type: [String],
     },
     username: {
         type: String,
