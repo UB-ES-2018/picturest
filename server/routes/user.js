@@ -13,7 +13,8 @@ module.exports = function (app) {
     app.put('/addDesc', user.addProfileDesc)
     app.put('/user/pin/:imageId', user.pinImage)
     app.get('/user/downloadPinned', user.downloadPinned)
-    app.put('/addInterest', user.addInterest)
+    app.put('/user/addInterest', user.addInterest)
+    app.get('/user/downloadInterest', user.downloadInterest)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }

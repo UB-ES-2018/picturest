@@ -239,7 +239,7 @@ exports.downloadPinned = function (req, res) {
     })
 }
 
-// Add an interest
+// PUT /user/addInterest   ->   Add an interest
 exports.addInterest = function(req, res) {
     var token = req.body.token || req.query.token || req.headers['x-access-token']
     let decodedToken = jwt.decode(token)
@@ -247,18 +247,28 @@ exports.addInterest = function(req, res) {
     var email = decodedToken.email
     var interests = req.body.interests
 
+    let regexp =/\S+/g
+    let result = String(interests).match(regexp)
+    interests = []
+    if (result) {
+        // Avoid to repeat interests
+        interests = new Set()
+        result.forEach((word) => {
+            interests.add(word)
+        })
+        // Avoid to repeat interests
+        interests = Array.from(interests)
+    }
+
     User.findOne({ email: email }).then(function (user, err) {
         if (user) {
-            console.debug("Before: " + user.interests)
-            user.interests.append(interests)
+            user.interests = interests
             user.save().then(function (dbRes) {
-                console.log('User updated to db with id:', dbRes._id)
                 res.json({
                     success: true,
                     user_interests: dbRes._id
                 })
             })
-            console.debug("After: " + user.interests)
         }
         if (err) {
             res.json({
@@ -267,6 +277,27 @@ exports.addInterest = function(req, res) {
             })
         }
     }).catch((err) => { console.log(err) })
+}
+
+// GET /user/downloadInterest
+exports.downloadInterest = function (req, res) {
+    var token = req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            res.json({
+                success: true,
+                interests: user.interests
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "Cannot find user."
+            })
+        }
+    })
 }
 
 exports.middleware = function (app) {
