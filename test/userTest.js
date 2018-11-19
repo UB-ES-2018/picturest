@@ -2,8 +2,10 @@ var chai = require('chai');
 var mongoose = require("mongoose");
 var chaiHttp = require('chai-http');
 var server = require('../app');
+var User = require('../server/models/user');
 var should = chai.should();
 
+const signup_url = "/signup";
 const login_url = "/login";
 const add_interest_url = "/user/addInterest";
 const get_interest_url = "/user/downloadInterest";
@@ -15,13 +17,50 @@ describe("\n\nIn the controllers/user.js", () => {
 
     let validUser = {
         email: 'jose@gmail.com',
-        password: '123'
+        password: '123',
+        age: 50
     }
 
     let invalidUser = {
         email: 'nonexistent@gmail.com',
-        password: '123'
+        password: '123',
+        age: 50
     }
+
+    // Remove if user exists
+    User.findOne({ email: validUser.email }).then(function(user, err) {
+        if (user) {
+            user.remove()
+        }
+    });
+
+    // Sign up TEST
+    describe("POST /signup", () => {
+
+        it("non-existent user should return success true", (done) => {
+            chai.request(server)
+                .post(signup_url)
+                .send(validUser)
+                .end((error, response) => {
+                    response.should.have.status(200);
+                    response.body.should.have.property('success').eql(true);
+                    response.body.should.have.property('id');
+                    done();
+            });
+        });
+
+        it("existent user should return error", (done) => {
+            chai.request(server)
+                .post(signup_url)
+                .send(validUser)
+                .end((error, response) => {
+                    response.should.have.status(200);
+                    response.body.should.have.property('success').eql(false);
+                    response.body.should.have.property('error');
+                    done();
+            });
+        });
+    });
 
     // Login TEST
     describe("POST /login", () => {
@@ -112,5 +151,4 @@ describe("\n\nIn the controllers/user.js", () => {
                 });
         });
     });
-
 });
