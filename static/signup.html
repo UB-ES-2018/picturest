@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <!-- use this <link rel="icon" href="favicon.ico"> for the favicon -->
 <!-- Bootstrap CSS-->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <!-- Latest compiled and minified JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -19,15 +19,15 @@
 	<link href="css/signup.css" rel="stylesheet">
 </head>
  <body class="text-center", background="Images/BackgroundSignUp.jpg">
-    <form class="form-signin" id="login" x-target="/login" x-method="post" action="javascript:submitForm('login')" x-enctype="application/x-www-form-urlencoded" class="box">
+    <form class="form-signin" id="signup" x-target="/signup" x-method="post" action="javascript:submitForm('signup')" x-enctype="application/x-www-form-urlencoded" class="box">
       <img class="mb-4" src="Images/picturestlogo.svg" alt="" width="80" height="80">
       <h1 class="h3 mb-3 font-weight-normal">Please Register</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+      <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
       <label for="inputAge" class="sr-only">Age</label>
-      <input type="age" id="inputAge" class="form-control" placeholder="Age" required>
+      <input type="age" name="age" id="inputAge" class="form-control" placeholder="Age" required>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
     </form>
