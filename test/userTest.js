@@ -3,12 +3,16 @@ var mongoose = require("mongoose");
 var chaiHttp = require('chai-http');
 var server = require('../app');
 var User = require('../server/models/user');
+var Collection = require('../server/models/collection');
 var should = chai.should();
 
 const signup_url = "/signup";
 const login_url = "/login";
 const add_interest_url = "/user/addInterest";
 const get_interest_url = "/user/downloadInterest";
+const add_collection_url = "/user/addCollection";
+const get_collection_url = "/user/downloadCollection";
+
 
 // Using chai
 chai.use(chaiHttp);
@@ -31,6 +35,13 @@ describe("\n\nIn the controllers/user.js", () => {
     User.findOne({ email: validUser.email }).then(function(user, err) {
         if (user) {
             user.remove()
+        }
+    });
+
+    // Remove if collection exists on user
+    Collection.findOne({ email: validUser.email }).then(function(collection, err) {
+        if (collection) {
+            collection.remove()
         }
     });
 
@@ -144,7 +155,78 @@ describe("\n\nIn the controllers/user.js", () => {
                         .end((error, response) => {
                             response.should.have.status(200);
                             response.body.should.have.property('success').eql(true);
-                            response.body.should.have.property('interests').eql(['surf', 'fishing']);
+                            response.body.should.have.property('interests').eql(['surf,fishing']);
+                        });
+
+                    done();
+                });
+        });
+    });
+
+    // Add a collection of photos to user TEST
+    describe("POST /user/addCollection", () => {
+
+        it("should return collection added successfully", (done) => {
+            chai.request(server)
+                .post(login_url)
+                .send(validUser)
+                .end((error, response) => {
+                    let token = response.body.token;
+
+                    let collection = {
+                        token: token,
+                        email: validUser.email,
+                        name: "collection guay",
+                        images: [
+                            "imgID1",
+                            "imgID2"
+                        ],
+                        description: "Super guay"
+                    };
+
+                    // GET /user/downloadInterest
+                    chai.request(server)
+                        .post(add_collection_url)
+                        .send(collection)
+                        .end((error, response) => {
+                            response.should.have.status(200);
+                            response.body.should.have.property('success').eql(true);
+                            response.body.should.have.property('id');
+                        });
+
+                    done();
+                });
+        });
+    });
+
+    // Get collections from user
+    describe("GET /user/downloadCollections", () => {
+
+        it("should return interests successfully", (done) => {
+            chai.request(server)
+                .post(login_url)
+                .send(validUser)
+                .end((error, response) => {
+                    let token = response.body.token;
+
+                    let collections = [{
+                        token: token,
+                        email: validUser.email,
+                        name: "collection guay",
+                        images: [
+                            "imgID1",
+                            "imgID2"
+                        ],
+                        description: "Super guay"
+                    }];
+
+                    // GET /user/downloadInterest
+                    chai.request(server)
+                        .get(get_collection_url)
+                        .set('x-access-token', token) // Set header
+                        .end((error, response) => {
+                            response.should.have.status(200);
+                            response.body.eql(collections);
                         });
 
                     done();
