@@ -173,15 +173,16 @@ transform:translatey(0);
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="js/superagent.js"></script>
         <script src="js/examples.js"></script>
-        <!--DRAG & DROP-->
+        <!--DRAG & DROP--> <!--Añadido-->
         <script src="js/dropzone.js"></script>
         <link rel="stylesheet" href="css/dropzone.css">
         <link rel="stylesheet" href="css/basic.css">
     </head>
 
     <body>
-        
-        <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+      <!--Añadido-->
+      <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
@@ -209,7 +210,30 @@ transform:translatey(0);
                 </div>
             </div>
         </div>
+        <!--<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
 
+                  <div class="modal-header text-center">
+                      <h1 class="h3 mb-3 font-weight-normal">Upload Image</h1>
+                      <div id="respuesta"> </div>
+                  </div>
+
+                  <div class="modal-body mx-3">
+                      <form id="image-upload" method="" x-target="/image" x-method="post" action="javascript:upload()" x-enctype="multipart/form-data" class="box">
+                        <h1>Image upload (requires login)</h1>
+                        <input id="image-uploader" type="file" name="image" />
+                        <input type="submit" value="Upload"/>
+                        <div class="modal-body mx-3">
+                          <img src="" id="upload-demo" style="width:100%">
+                        </div>
+                      </form>
+                      <textarea id="upload-log"></textarea>
+                  </div>
+                                          
+              </div>
+          </div>
+      </div>-->
 
     <!-- Navigator bar-->
     <nav class="navbar navbar-default" role="navigation"><!--data-spy="affix" para que siga el scroll-->
@@ -238,9 +262,9 @@ transform:translatey(0);
             </form>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#">Home</a></li>
+          <li class="active"><a href="http://localhost:3000/static/Perfil.html">Home</a></li>
           <li><a href="#">Following</a></li>
-          <li><a href="#"><i class="glyphicon glyphicon-user"></i></a></li>
+          <li><a href="http://localhost:3000/static/profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><b class="caret"></b></a>
             <ul class="dropdown-menu">
@@ -262,6 +286,7 @@ transform:translatey(0);
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-horizontal"></i></a>
             <ul class="dropdown-menu">
+              <li><a href="http://localhost:3000/static/settings.html">Edit Profile</a></li>
               <li><a href="#">Action</a></li>
               <li><a href="#">Another action</a></li>
               <li><a href="#">Something else here</a></li>

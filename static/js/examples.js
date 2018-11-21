@@ -3,6 +3,7 @@
 const basePath = 'http://localhost:3000'
 
 let token = ''
+let aux = ''
 
 function submitForm(formId) {
   let formDom = document.querySelector('#' + formId)
@@ -32,6 +33,7 @@ function submitForm(formId) {
 
     let email = form.get('email')
     let password = form.get('password')
+    aux = email.split("@")[0]
     
     data = {
       email : email,
@@ -57,6 +59,7 @@ function submitForm(formId) {
     
     if(formId=='login' && res.body.token){
       document.cookie = setCookie("token",token,1);
+      document.cookie = setCookie("username",aux,1);
       window.location = "Perfil.html"
     }
     //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
@@ -72,7 +75,6 @@ function submitForm(formId) {
 function upload() {
   let file = document.querySelector('#image-uploader').files[0]
   let token = getCookie("token")
-  let text = document.querySelector('#image-description').value
 
   superagent
   .post('http://localhost:3000/image')
@@ -82,9 +84,10 @@ function upload() {
   .then(function(res) {
     let source = getImage(res.body.url)
 
-    getTag(res.body.imageId, text)
+    getTag(res.body.imageId, text)//Añadido
 
     document.querySelector('#upload-demo').setAttribute('src', source)
+    document.querySelector('#upload-log').value = res.body.url
     var i = document.createElement("img")
     i.src= source;
     i.style.cssText = 'width:100%'
@@ -93,6 +96,7 @@ function upload() {
   })
 }
 
+//Añadido
 function getTag(id, text){
   let token = getCookie("token")
 
