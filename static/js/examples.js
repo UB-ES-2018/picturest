@@ -41,10 +41,10 @@ function submitForm(formId) {
     }
   }
 
-  console.log('token', token)
-  console.log('encType', encType)
-  console.log('target', basePath + target)
-  console.log('data', data)
+  //console.log('token', token)
+  //console.log('encType', encType)
+  //console.log('target', basePath + target)
+  //console.log('data', data)
 
   superagent
   .post(basePath + target)
@@ -58,8 +58,8 @@ function submitForm(formId) {
     }
     
     if(formId=='login' && res.body.token){
-      document.cookie = setCookie("token",token,1);
-      document.cookie = setCookie("username",aux,1);
+      document.cookie = setCookie('token',token,1);
+      document.cookie = setCookie('username',aux,1);
       window.location = "Perfil.html"
     }
     //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
@@ -231,15 +231,15 @@ function sendUserPic(idImg){
   let token = getCookie("token")
 
   let encType = "application/x-www-form-urlencoded" 
-  let target = "/image/"
+  let target = "/addImg/"
   let userID = getCookie("username")
   let data = {}
-  console.log(token)
+  
   data = {
     imageId : idImg,
     token : token
   }
-
+  console.log(data)
   superagent
   .put(basePath + target + userID)
   //.set('x-access-token', token)
@@ -247,6 +247,7 @@ function sendUserPic(idImg){
   .set('Accept', 'application/json')
   .send(data)
   .then(function(res) {
+    console.log(JSON.stringify(res.body))
     alert("se ha subido tu imagen de perfil")
   })
   .catch(function(e) {
@@ -269,7 +270,8 @@ function descUser(){
   let desc = form.get('desc-user')
 
   data = {
-    desc : desc
+    desc : desc,
+    token : token
   }
 
   console.log('token', token)
@@ -279,13 +281,13 @@ function descUser(){
 
   superagent
   .put(basePath + target)
-  .set('x-access-token', token)
+  //.set('x-access-token', token)
   .set('Content-Type', encType)
   .set('Accept', 'application/json')
   .send(data)
   .then(function(res) {
     alert("se ha subido la descripcion")
-    //console.log(JSON.stringify(res.body))
+    console.log(JSON.stringify(res.body))
   })
   .catch(function(e) {
     console.error(e)
