@@ -15,6 +15,8 @@ module.exports = function (app) {
     app.get('/user/downloadPinned', user.downloadPinned)
     app.put('/user/addInterest', user.addInterest)
     app.get('/user/downloadInterest', user.downloadInterest)
+    app.post('/user/addCollection', user.addCollection)
+    app.get('/user/downloadCollections', user.downloadCollections)
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
 }

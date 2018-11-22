@@ -1,5 +1,6 @@
 var User = require('../models/user')
 var Image = require('../models/image')
+var Collection = require('../models/collection')
 var jwt = require('jsonwebtoken')
 
 
@@ -295,6 +296,87 @@ exports.downloadInterest = function (req, res) {
             res.json({
                 success: false,
                 error: "Cannot find user."
+            })
+        }
+    })
+}
+
+// POST /user/addCollection   ->   Add a collection
+exports.addCollection = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+
+    var email = decodedToken.email
+    var name = req.body.name
+    var images = req.body.images // array of IDs
+    var description = req.body.description
+
+    // Array of IDs splitted by spaces
+    let regexp =/\S+/g
+    let result = String(images).match(regexp)
+    let arrayImages = []
+    if (result) {
+        // Avoid to repeat interests
+        arrayImages = new Set()
+        result.forEach((id) => {
+            arrayImages.add(id)
+        })
+        // Avoid to repeat interests
+        arrayImages = Array.from(arrayImages)
+    }
+
+    // new collection object
+    let collection = new Collection ({
+        email: email,
+        name: name,
+        images: arrayImages,
+        description: description,
+        followedBy: []
+
+    })
+
+    // saving into db
+    collection.save(function (err, saved) {
+        if (err) {
+            res.json({
+                success: false,
+                error: "Error while adding collection of photos"
+            })
+        }
+        if (saved) {
+            // if OK sends true
+            res.json({
+                success: true,
+                id: collection._id
+            })
+        }
+    })
+}
+
+// GET /user/downloadCollections
+exports.downloadCollections = function (req, res) {
+    var token = req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+
+    Collection.find({email: email}).then((collection, err) => {
+        var result = []
+
+        if (collection) {
+            collection.forEach((collect) => {
+                result.push({
+                    name: collect.name,
+                    images: collect.images,
+                    description: collect.description,
+                    followedBy: collect.followedBy
+                })
+            })
+            res.json(result)
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "Cannot find collection."
             })
         }
     })
