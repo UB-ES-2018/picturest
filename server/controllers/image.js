@@ -38,7 +38,7 @@ exports.upload = function (req, res) {
 
     dbImage.save().then(function(dbRes) {
         console.log('Image uploaded to db with id:', dbRes._id)
-        res.json({url : 'http://localhost:3000/image/' + dbRes._id})
+        res.json({url : 'http://localhost:3000/image/' + dbRes._id, imageId: dbRes._id})
     })
 }
 
@@ -88,7 +88,7 @@ exports.addTag = function (req, res) {
         img.tag = tags
         img.save().then(function (dbRes) {
             console.log('Image updated to db with id:', dbRes._id)
-            res.json({url: 'http://localhost:3000/image/' + dbRes._id})
+            res.json({url: 'http://localhost:3000/image/' + dbRes._id, imageId: dbRes._id})
         })
     })
     .catch(console.error)
