@@ -75,6 +75,7 @@ function submitForm(formId) {
 function upload() {
   let file = document.querySelector('#image-uploader').files[0]
   let token = getCookie("token")
+  let text = document.querySelector('#image-description').value
 
   superagent
   .post('http://localhost:3000/image')
@@ -87,7 +88,7 @@ function upload() {
     getTag(res.body.imageId, text)//Añadido
 
     document.querySelector('#upload-demo').setAttribute('src', source)
-    document.querySelector('#upload-log').value = res.body.url
+    //document.querySelector('#upload-log').value = res.body.url
     var i = document.createElement("img")
     i.src= source;
     i.style.cssText = 'width:100%'
