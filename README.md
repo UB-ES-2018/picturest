@@ -173,9 +173,11 @@ Request headers (example):
 x-access-token: 435f4w3f...43t423g234
 ```
 Body:
+```
 {
     "collId": <Collection ID>
 }
+```
 Response
 ```
 {
