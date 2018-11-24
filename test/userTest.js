@@ -12,6 +12,7 @@ const add_interest_url = "/user/addInterest";
 const get_interest_url = "/user/downloadInterest";
 const add_collection_url = "/user/addCollection";
 const get_collection_url = "/user/downloadCollection";
+const followCollection = "/user/followCollection/";
 
 
 // Using chai
@@ -233,4 +234,25 @@ describe("\n\nIn the controllers/user.js", () => {
                 });
         });
     });
+
+    // A user can follow a collection
+    describe("PUT /user/followCollection", () => {
+        it("should return status 200", (done) => {
+            chai.request(server)
+            .post(login_url)
+            .send(validUser)
+            .end((err, res) => {
+                let token = res.body.token
+                let collection = {collId: "5bf98b83e3ba9e32bb2c61c1"}
+                chai.request(server)
+                    .put(followCollection)
+                    .send(collection)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.have.property('success').eql(true);
+                    });
+                done()
+            })
+        })
+    })
 });

@@ -122,7 +122,10 @@ exports.findByTag = function (req, res) {
             image.tag.forEach((tag) => {
                 tags.forEach((_tag) => {
                     if (tag === _tag) {
-                        searchResult.push(image._id)
+                        if (!searchResult.includes(image._id)) {
+                            searchResult.push(image._id)
+                        }
+                        
                     }
                 })
             })

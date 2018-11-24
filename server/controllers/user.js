@@ -382,6 +382,48 @@ exports.downloadCollections = function (req, res) {
     })
 }
 
+// PÚT /user/followCollection/:collId
+exports.followCollection = function(req, res) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token']
+    let decodedToken = jwt.decode(token)
+    let collection = req.body.collId
+
+    Collection.findOne({_id: collection}).then((coll, err) => {
+        if (coll) {
+            User.findOne({email: decodedToken.email}).then((usr, err) => {
+                if (usr) {
+                    if (!usr.collections.includes(collection)) {
+                        usr.collections.push(collection)
+                        res.json({
+                            success: true,
+                            collection: coll._id,
+                            user: usr._id
+                        })
+                    }
+                    else {
+                        res.status(200).send({
+                            success: true,
+                            msg: "Already added"
+                        })
+                    } 
+                }
+                if (err) {
+                    res.status(500).send({
+                        success: false,
+                        msg: "Cannot find user"
+                    })
+                }
+            })
+        }
+        if (err) {
+            res.status(500).send({
+                success: false,
+                msg: "Cannot find collection"
+            })
+        }
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {
