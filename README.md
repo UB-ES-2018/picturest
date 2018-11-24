@@ -166,7 +166,28 @@ Response
     ]
  }
 ```
+- Follow collection: ```PUT /user/followCollection```
+Request headers (example):
 
+```
+x-access-token: 435f4w3f...43t423g234
+```
+Body:
+{
+    "collId": <Collection ID>
+}
+Response
+```
+{
+    "success": true,
+    "collection": "5bf98b83e3ba9e32bb2c61c1",
+    "user": "5bf984d713e5a92d45198acc"
+}
+    OR (if already added)
+{
+    "success": true    
+}
+```
 
 ## Frontend
 
