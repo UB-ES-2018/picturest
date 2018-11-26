@@ -344,6 +344,7 @@ function pinImage(imageId){
 
 }
 
+// Add interests when the user logs in for the first time
 function sendInterests(checked){
 
   let token = getCookie('token');
@@ -369,6 +370,7 @@ function sendInterests(checked){
   });
 }
 
+// Add user interests from settings
 function interestsUser(){
   let token = getCookie("token")
   let formDom = document.querySelector('#interests-user')
