@@ -344,4 +344,65 @@ function pinImage(imageId){
 
 }
 
+function sendInterests(checked){
 
+  let token = getCookie('token');
+  let interests =  checked;
+  console.log(interests);
+
+  let data = {}
+
+  data = {
+    interests : interests,
+    token : token
+  }
+
+  superagent
+  .put(basePath + '/user/addInterest')
+  .set('x-access-token', token)
+  .send(data)
+  .then(res => {
+    console.log(JSON.stringify(res.body))
+    console.log("INTERESOS AFEGITS!")
+  }).catch(e => {
+    console.log(e.message)
+  });
+}
+
+function interestsUser(){
+  let token = getCookie("token")
+  let formDom = document.querySelector('#interests-user')
+
+  let encType = formDom.getAttribute('x-enctype')
+  let target = formDom.getAttribute('x-target')
+  let method = formDom.getAttribute('x-method')
+
+  let data = {}
+
+  let form = new FormData(formDom)
+
+  let interests = form.get('int-user')
+
+  data = {
+    interests : interests,
+    token : token
+  }
+
+  console.log('token', token)
+  console.log('encType', encType)
+  console.log('target', basePath + target)
+  console.log('data', data)
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    alert("INTERESOS PUJATS!")
+    console.log(JSON.stringify(res.body))
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
