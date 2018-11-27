@@ -424,6 +424,60 @@ exports.followCollection = function(req, res) {
     })
 }
 
+// get profile image id GET /user/profileImg
+exports.getProfileImage = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            res.json({
+                success: true,
+                profile_img: user.profile_img
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "User not found"
+            })
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            error: "Unexpected error on server, user cannot be find"
+        })
+    })
+}
+
+// get profile image id GET /user/profileDesc
+exports.getProfileDesc = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            res.json({
+                success: true,
+                profile_desc: user.profile_desc
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "User not found"
+            })
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            error: "Unexpected error on server, user cannot be find"
+        })
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {

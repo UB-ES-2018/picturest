@@ -4,6 +4,7 @@ var chaiHttp = require('chai-http');
 var server = require('../app');
 var User = require('../server/models/user');
 var Collection = require('../server/models/collection');
+var Image = require('../server/models/image');
 var should = chai.should();
 
 const signup_url = "/signup";
@@ -13,6 +14,9 @@ const get_interest_url = "/user/downloadInterest";
 const add_collection_url = "/user/addCollection";
 const get_collection_url = "/user/downloadCollection";
 const followCollection = "/user/followCollection/";
+const get_profile_desc = "/user/profileDesc";
+const get_profile_img = "/user/profileImg";
+const add_profile_img = "/user/addImg";
 
 
 // Using chai
@@ -45,6 +49,7 @@ describe("\n\nIn the controllers/user.js", () => {
             collection.remove()
         }
     });
+
 
     // Sign up TEST
     describe("POST /signup", () => {
@@ -238,12 +243,18 @@ describe("\n\nIn the controllers/user.js", () => {
     // A user can follow a collection
     describe("PUT /user/followCollection", () => {
         it("should return status 200", (done) => {
+            let collection_id = ""
+            Collection.findOne({ email: validUser.email }).then(function(collection, err) {
+                if (collection) {
+                    collection_id = collection._id
+                }
+            });
             chai.request(server)
             .post(login_url)
             .send(validUser)
             .end((err, res) => {
                 let token = res.body.token
-                let collection = {collId: "5bf98b83e3ba9e32bb2c61c1"}
+                let collection = {collId: collection_id}
                 chai.request(server)
                     .put(followCollection)
                     .send(collection)
@@ -255,4 +266,79 @@ describe("\n\nIn the controllers/user.js", () => {
             })
         })
     })
+
+    // Get profile desc from user
+    describe("GET /user/profileDesc", () => {
+
+        it("should return profile desc successfully", (done) => {
+            chai.request(server)
+                .post(login_url)
+                .send(validUser)
+                .end((error, response) => {
+                    let token = response.body.token;
+
+                    // GET /user/downloadInterest
+                    chai.request(server)
+                        .get(get_profile_desc)
+                        .set('x-access-token', token) // Set header
+                        .end((error, response) => {
+                            response.should.have.status(200);
+                            response.body.should.have.property('success').eql(true);
+                        });
+
+                    done();
+                });
+        });
+    });
+
+    // Add profile img from user
+    describe("PUT /user/addImg", () => {
+        let image_id = "";
+        it("should return status 200", (done) => {
+            Image.findOne({}).then(function(image, err) {
+                if (image) {
+                    image_id = image._id
+                }
+            });
+            chai.request(server)
+            .post(login_url)
+            .send(validUser)
+            .end((err, res) => {
+                let token = res.body.token
+                let image = {imageId: image_id}
+                chai.request(server)
+                    .put(add_profile_img)
+                    .send(image)
+                    .end((err, res) => {
+                        res.should.have.status(200);
+                        res.body.should.have.property('success').eql(true);
+                    });
+                done()
+            })
+        })    
+    });
+
+    // Get profile img from user
+    describe("GET /user/profileImg", () => {
+
+        it("should return 200 if successfully", (done) => {
+            chai.request(server)
+                .post(login_url)
+                .send(validUser)
+                .end((error, response) => {
+                    let token = response.body.token;
+
+                    // GET /user/downloadInterest
+                    chai.request(server)
+                        .get(get_profile_img)
+                        .set('x-access-token', token) // Set header
+                        .end((error, response) => {
+                            response.should.have.status(200);
+                            response.body.should.have.property('success').eql(true);
+                        });
+
+                    done();
+                });
+        });
+    });
 });
