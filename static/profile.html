@@ -159,6 +159,28 @@ filter:alpha(opacity=100);
 -webkit-transform:translatey(0);
 transform:translatey(0);
 }
+#profileImage{
+  cursor: pointer;
+}
+
+#profile-container {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  margin-left: 20px;
+}
+#profile-container img {
+  width: 150px;
+  height: 150px;
+}
+textarea {
+  resize: none;
+}
 </style>
     
     <head>
@@ -176,7 +198,7 @@ transform:translatey(0);
         
     </head>
 
-    <body onload="cargarUser()">
+    <body onload="getProfileData()">
 
         
         <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -267,6 +289,16 @@ transform:translatey(0);
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
+
+    <div>
+      <h1 style="margin-left:20px;">Picture User</h1>
+      <div id="profile-container" >
+        <image id="profileImage" src="Images/No-Profile.png" />
+      </div>
+      <div>
+        <textarea rows="4" cols="50" id="profileDesc" readonly></textarea>
+      </div>
+    </div>
 
     <div class="contenedor">
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
