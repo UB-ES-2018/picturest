@@ -212,7 +212,7 @@ function getImageByTag(){
 }
 
 function imgUser(){
-  let file = document.querySelector('#image-uploader-user').files[0]
+  let file = document.querySelector('#imageUpload').files[0]
   let token = getCookie("token")
   
   superagent
@@ -222,7 +222,7 @@ function imgUser(){
   .attach('image', file, file.name)
   .then(function(res) {
     let source = getImage(res.body.url)
-    document.querySelector('#upload-demo-user').setAttribute('src', source)
+    //document.querySelector('#upload-demo-user').setAttribute('src', source)
     sendUserPic(res.body.imageId)
   })
 }
@@ -241,7 +241,7 @@ function sendUserPic(idImg){
   }
   console.log(data)
   superagent
-  .put(basePath + target + userID)
+  .put(basePath + target)
   //.set('x-access-token', token)
   .set('Content-Type', encType)
   .set('Accept', 'application/json')
