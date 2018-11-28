@@ -344,6 +344,39 @@ function pinImage(imageId){
 
 }
 
+function getImgPin(){
+  let token = getCookie("token")
+
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadPinned"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let pins = res.body.pins
+    let plen= pins.length
+
+    for (let p=0; p<plen ; p++){
+      let source = basePath +"/image/"+ pins[p]
+      console.log("-",source)
+      
+      var i = document.createElement("img");
+      i.src= source;
+      i.style.cssText = 'width:100%'
+      
+      document.querySelector('#columnaimagen1').appendChild(i);
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
 // Add interests when the user logs in for the first time
 function sendInterests(checked){
 
