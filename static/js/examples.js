@@ -294,11 +294,6 @@ function descUser(){
   })
 }
 
-function cargarUser(){
-
-
-}
-
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -360,7 +355,6 @@ function getImgPin(){
     console.log(JSON.stringify(res.body))
     let pins = res.body.pins
     let plen= pins.length
-
     for (let p=0; p<plen ; p++){
       let source = basePath +"/image/"+ pins[p]
       console.log("-",source)
@@ -377,6 +371,53 @@ function getImgPin(){
   })
 }
 
+function getProfileImg(){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profileImg"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let sImg =  basePath+ "/image/" + res.body.profile_img
+    document.querySelector('#profileImage').setAttribute('src',sImg)
+     })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function getProfileDesc(){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profileDesc"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let sDesc = res.body.profile_desc
+    document.querySelector('#profileDesc').appendChild(document.createTextNode(sDesc))
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function getProfileData(){
+  getProfileImg()
+  getProfileDesc()
+}
+    
 // Add interests when the user logs in for the first time
 function sendInterests(checked){
 
