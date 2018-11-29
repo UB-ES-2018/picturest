@@ -63,3 +63,6 @@ function useCors (app) {
   // Here is the magic
   app.use(cors(corsOptions))
 }
+
+// For testing purposes
+module.exports = app

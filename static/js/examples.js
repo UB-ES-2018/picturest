@@ -16,11 +16,11 @@ function submitForm(formId) {
 
   if (formId === 'signup'){
     let form = new FormData(formDom)
-
+    
     let email = form.get('email')
     let password = form.get('password')
     let age = form.get('age')
-
+    
     data = {
       email : email,
       password : password,
@@ -41,10 +41,10 @@ function submitForm(formId) {
     }
   }
 
-  console.log('token', token)
-  console.log('encType', encType)
-  console.log('target', basePath + target)
-  console.log('data', data)
+  //console.log('token', token)
+  //console.log('encType', encType)
+  //console.log('target', basePath + target)
+  //console.log('data', data)
 
   superagent
   .post(basePath + target)
@@ -57,23 +57,25 @@ function submitForm(formId) {
       token = res.body.token
     }
     
-    if(formId=='login'){
-      document.cookie = setCookie("token",token,1);
-      document.cookie = setCookie("username",aux,1);
+    if(formId=='login' && res.body.token){
+      document.cookie = setCookie('token',token,1);
+      document.cookie = setCookie('username',aux,1);
       window.location = "Perfil.html"
     }
-    document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
+    //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
+    console.log(JSON.stringify(res.body))
     
   })
   .catch(function(e) {
     console.error(e)
-    document.querySelector('#' + formId + '-log').value = JSON.stringify(e)
+    //document.querySelector('#' + formId + '-log').value = JSON.stringify(e)
   })
 }
 
 function upload() {
   let file = document.querySelector('#image-uploader').files[0]
   let token = getCookie("token")
+  let text = document.querySelector('#image-description').value
 
   superagent
   .post('http://localhost:3000/image')
@@ -83,14 +85,42 @@ function upload() {
   .then(function(res) {
     let source = getImage(res.body.url)
 
+    getTag(res.body.imageId, text)//Añadido
+
     document.querySelector('#upload-demo').setAttribute('src', source)
-    document.querySelector('#upload-log').value = res.body.url
+    //document.querySelector('#upload-log').value = res.body.url
     var i = document.createElement("img")
     i.src= source;
     i.style.cssText = 'width:100%'
     document.querySelector('#columnaimagen').appendChild(i);
 
   })
+}
+
+//Añadido
+function getTag(id, text){
+  let token = getCookie("token")
+
+  let data = {}
+
+  data = {
+      imageId : id,
+      desc : text
+  }
+
+  superagent
+  .put('http://localhost:3000/image/tag')
+  .set('x-access-token', token)
+  .set('Content-Type','application/x-www-form-urlencoded')
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    console.log('url', res.body.url)
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+  
 }
 
 function getImage(url) {
@@ -158,7 +188,7 @@ function getImageByTag(){
       var a = document.createElement("a");
       a.className = "btn btn-primary btn-danger"
       a.setAttribute('href','#');
-      var idImg= 'pinImage('+ imgs[l] + ')';
+      var idImg= 'pinImage("'+ imgs[l] + '")';
       a.setAttribute('onclick',idImg);
 
       var s = document.createElement("span");
@@ -182,7 +212,7 @@ function getImageByTag(){
 }
 
 function imgUser(){
-  let file = document.querySelector('#image-uploader-user').files[0]
+  let file = document.querySelector('#imageUpload').files[0]
   let token = getCookie("token")
   
   superagent
@@ -192,7 +222,7 @@ function imgUser(){
   .attach('image', file, file.name)
   .then(function(res) {
     let source = getImage(res.body.url)
-    document.querySelector('#upload-demo-user').setAttribute('src', source)
+    //document.querySelector('#upload-demo-user').setAttribute('src', source)
     sendUserPic(res.body.imageId)
   })
 }
@@ -201,22 +231,23 @@ function sendUserPic(idImg){
   let token = getCookie("token")
 
   let encType = "application/x-www-form-urlencoded" 
-  let target = "/image/"
+  let target = "/addImg/"
   let userID = getCookie("username")
   let data = {}
-  console.log(token)
+  
   data = {
     imageId : idImg,
     token : token
   }
-
+  console.log(data)
   superagent
-  .put(basePath + target + userID)
+  .put(basePath + target)
   //.set('x-access-token', token)
   .set('Content-Type', encType)
   .set('Accept', 'application/json')
   .send(data)
   .then(function(res) {
+    console.log(JSON.stringify(res.body))
     alert("se ha subido tu imagen de perfil")
   })
   .catch(function(e) {
@@ -239,7 +270,8 @@ function descUser(){
   let desc = form.get('desc-user')
 
   data = {
-    desc : desc
+    desc : desc,
+    token : token
   }
 
   console.log('token', token)
@@ -249,22 +281,17 @@ function descUser(){
 
   superagent
   .put(basePath + target)
-  .set('x-access-token', token)
+  //.set('x-access-token', token)
   .set('Content-Type', encType)
   .set('Accept', 'application/json')
   .send(data)
   .then(function(res) {
     alert("se ha subido la descripcion")
-    //console.log(JSON.stringify(res.body))
+    console.log(JSON.stringify(res.body))
   })
   .catch(function(e) {
     console.error(e)
   })
-}
-
-function cargarUser(){
-
-
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -290,5 +317,168 @@ function getCookie(cname) {
     return "";
 }
 
+// Funció per que l'usuari ja loguejat pugui pinejar una imatge. 
+function pinImage(imageId){
+  
+  let token = getCookie('token');
 
-//
+  let x = imageId
+
+  console.log("THIS IS THE ENTERED IMAGE ID: ", x);
+
+  superagent
+  .put(basePath + '/user/pin/' + x)
+  .set('x-access-token', token)
+  .field('token', token)
+  .then(res => {
+    window.alert('Image pinned successfully')
+    console.log(JSON.stringify(res.body))
+  }).catch(e => {
+    console.log(e.message)
+  });
+
+}
+
+function getImgPin(){
+  let token = getCookie("token")
+
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadPinned"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let pins = res.body.pins
+    let plen= pins.length
+    for (let p=0; p<plen ; p++){
+      let source = basePath +"/image/"+ pins[p]
+      console.log("-",source)
+      
+      var i = document.createElement("img");
+      i.src= source;
+      i.style.cssText = 'width:100%'
+      
+      document.querySelector('#columnaimagen1').appendChild(i);
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function getProfileImg(){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profileImg"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let sImg =  basePath+ "/image/" + res.body.profile_img
+    document.querySelector('#profileImage').setAttribute('src',sImg)
+     })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function getProfileDesc(){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profileDesc"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let sDesc = res.body.profile_desc
+    document.querySelector('#profileDesc').appendChild(document.createTextNode(sDesc))
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function getProfileData(){
+  getProfileImg()
+  getProfileDesc()
+}
+    
+// Add interests when the user logs in for the first time
+function sendInterests(checked){
+
+  let token = getCookie('token');
+  let interests =  checked;
+  console.log(interests);
+
+  let data = {}
+
+  data = {
+    interests : interests,
+    token : token
+  }
+
+  superagent
+  .put(basePath + '/user/addInterest')
+  .set('x-access-token', token)
+  .send(data)
+  .then(res => {
+    console.log(JSON.stringify(res.body))
+    console.log("INTERESOS AFEGITS!")
+  }).catch(e => {
+    console.log(e.message)
+  });
+}
+
+// Add user interests from settings
+function interestsUser(){
+  let token = getCookie("token")
+  let formDom = document.querySelector('#interests-user')
+
+  let encType = formDom.getAttribute('x-enctype')
+  let target = formDom.getAttribute('x-target')
+  let method = formDom.getAttribute('x-method')
+
+  let data = {}
+
+  let form = new FormData(formDom)
+
+  let interests = form.get('int-user')
+
+  data = {
+    interests : interests,
+    token : token
+  }
+
+  console.log('token', token)
+  console.log('encType', encType)
+  console.log('target', basePath + target)
+  console.log('data', data)
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    alert("INTERESOS PUJATS!")
+    console.log(JSON.stringify(res.body))
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
