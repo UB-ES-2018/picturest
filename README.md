@@ -167,6 +167,92 @@ Response
  }
 ```
 
+- Add interest user: ```PUT /user/addInterest```
+Request body:
+```
+{
+    "interests": "interest1 interest2 separated by space",
+    "token": "Token provided on login"
+}
+```
+Response
+```
+{
+    "success": true,
+    "user_interests": interests ID
+}
+```
+
+- Download an interest of user: ```GET /user/downloadInterest```
+```
+x-access-token: 435f4w3f...43t423g234
+```
+Response
+```
+{
+    "success": true,
+    "interests": ['interest1, interest2']
+}
+```
+
+- Add a collection in a user: ```POST /user/addCollection```
+Request body:
+```
+{
+    "name": "best collection ever",
+    "images": "imageID1 imageID2 imageID3 separatedID byID spaceID",
+    "description": "description of collection",
+    "token": "Token provided on login"
+}
+```
+Response
+```
+{
+    "success": true,
+    "id": collection ID
+}
+```
+
+- Download all collections of a user: ```GET /user/downloadCollections```
+```
+x-access-token: 435f4w3f...43t423g234
+```
+Response
+```
+[
+    {
+        "name": collect.name,
+        "images": imageID1 imageID2 imageID3 separatedID byID spaceID,
+        "description": "collection description",
+        "followedBy": []
+    }
+]
+```
+
+- Follow collection: ```PUT /user/followCollection```
+Request headers (example):
+
+```
+x-access-token: 435f4w3f...43t423g234
+```
+Body:
+```
+{
+    "collId": <Collection ID>
+}
+```
+Response
+```
+{
+    "success": true,
+    "collection": "5bf98b83e3ba9e32bb2c61c1",
+    "user": "5bf984d713e5a92d45198acc"
+}
+    OR (if already added)
+{
+    "success": true    
+}
+```
 
 ## Frontend
 
