@@ -3,11 +3,6 @@ var Image = require('../models/image')
 var Collection = require('../models/collection')
 var jwt = require('jsonwebtoken')
 
-// Socket.io API
-var app = require('../app');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
 // registers new user
 exports.signup = function (req, res) {
     // get body
@@ -508,4 +503,4 @@ exports.middleware = function (app) {
         }
     })
 }
-  
+
