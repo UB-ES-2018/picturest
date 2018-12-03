@@ -82,6 +82,9 @@
   height:60px;
   border-radius:100%;
   background:#F44336;
+  right:0;
+  bottom:0;
+  position:absolute;
   margin-right:16px;
   margin-bottom:16px;
   border:none;
@@ -89,16 +92,18 @@
   color:#FFF;
   font-size:36px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  transition:.3s; 
-  position: fixed;
-  bottom: 2px;
-  right: 0px; 
+  transition:.3s;  
 }
 .botonF1:hover span{
   transform:rotate(360deg);
 }
 .botonF1:active{
   transform:scale(1.1);
+}
+.botonF2{
+  background:#2196F3;
+  margin-bottom:85px;
+  transition:0.5s;
 }
 .animacionVer{
   transform:scale(1);
@@ -145,32 +150,74 @@
     <body>
 
         
-        <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+      <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
 
-                        <div class="modal-header text-center">
-                            <h1 class="h3 mb-3 font-weight-normal">Upload Image</h1>
-                            <div id="respuesta"> </div>
-                        </div>
-
-                        <div class="modal-body mx-3">
-                            <form id="image-upload" method="" x-target="/image" x-method="post" action="javascript:upload()" x-enctype="multipart/form-data" class="box">
-                              <h1>Image upload (requires login)</h1>
-                              <input id="image-uploader" type="file" name="image" />
-                              <input type="submit" value="Upload"/>
-                              <div class="modal-body mx-3">
-                                <img src="" id="upload-demo" style="width:100%">
-                              </div>
-                            </form>
-                            <textarea id="upload-log"></textarea>
-                        </div>
-                                                
-                    </div>
-                </div>
+            <div class="modal-header text-center">
+                <h1 class="h3 mb-3 font-weight-normal">Upload Image</h1>
+                <div id="respuesta"> </div>
             </div>
 
+            <div class="modal-body mx-3">
+                <form id="image-upload" method="" x-target="/image" x-method="post" action="javascript:upload()" x-enctype="multipart/form-data" class="box">
+                  <h1>Image upload (requires login)</h1>
+                  <input id="image-uploader" type="file" name="image" />
+                  <input type="submit" value="Upload"/>
+                  <div class="modal-body mx-3">
+                    <img src="" id="upload-demo" style="width:100%">
+                  </div>
+                </form>
+                <textarea id="upload-log"></textarea>
+            </div>                                                
+          </div>
+        </div>
+      </div>
 
+      <div class="modal fade" id="modalCollection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="container">
+          <h3>Bootstrap image checkbox(multiple)</h3>
+          <div>
+            <input type="text">
+          </div>
+          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+            <label class="image-checkbox">
+              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
+              <input type="checkbox" name="image[]" value="" />
+              <i class="fa fa-check hidden"></i>
+            </label>
+          </div>
+          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+            <label class="image-checkbox">
+              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
+              <input type="checkbox" name="image[]" value="" />
+              <i class="fa fa-check hidden"></i>
+            </label>
+          </div>
+          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+            <label class="image-checkbox">
+              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
+              <input type="checkbox" name="image[]" value="" />
+              <i class="fa fa-check hidden"></i>
+            </label>
+          </div>
+          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+            <label class="image-checkbox">
+              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
+              <input type="checkbox" name="image[]" value="" />
+              <i class="fa fa-check hidden"></i>
+            </label>
+          </div>
+          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+            <label class="image-checkbox">
+              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
+              <input type="checkbox" name="image[]" value="" />
+              <i class="fa fa-check hidden"></i>
+            </label>
+          </div>        
+        </div>   
+      </div>
+      
     <!-- Navigator bar-->
     <nav class="navbar navbar-default" role="navigation"><!--data-spy="affix" para que siga el scroll-->
       <!-- Brand and toggle get grouped for better mobile display -->
@@ -268,6 +315,9 @@
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
           <span>+</span>
         </button>
+        <button class="btn botonF2"  data-toggle="modal" data-target="#modalCollection">
+          <span>+</span>
+        </button>
     </div>
     
     <!--TODO!!!!!!!!!!!!!!!!!!!!!!!! para el boton de añadir https://codepen.io/waynelkh/pen/rapjbJ -->
@@ -275,8 +325,11 @@
 </html>
 
 <script>
-    $('.botonF1').click(function(){
-        $('.btn').addClass('animacionVer');
+    $('.botonF1').hover(function(){
+      $('.btn').addClass('animacionVer');
+    })
+    $('.contenedor').mouseleave(function(){
+      $('.btn').removeClass('animacionVer');
     })
     $("#profileImage").click(function(e) {
         $("#imageUpload").click();
