@@ -344,4 +344,30 @@ function pinImage(imageId){
 
 }
 
+function addCollection () {
+  let name = document.querySelector('#collection-name').value
+  var files = document.getElementById('collection-uploader').files;
+  let token = getCookie("token")
+  let text = document.querySelector('#collection-description').value
+  let data = {}
+  
+  data = {
+    name  : name,
+    images: file,
+    description : text,
+    token: token
+  }
 
+  superagent
+  .post('http://localhost:3000/user/addCollection')
+  .set('x-access-token', token)  
+  .set('Content-Type','application/x-www-form-urlencoded')
+  .set('Accept', 'application/json')
+  .send(data)
+  .then(function(res) {
+    console.log('url', res.body.url)
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
