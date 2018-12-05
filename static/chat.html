@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="js/superagent.js"></script>
+      <script src="js/examples.js"></script>
+  <title>Chat</title>
+  <link href="css/chat.css" rel="stylesheet">
+</head>
+
+  <body>
+    <!-- Navigator bar-->
+    <nav class="navbar navbar-default" role="navigation"><!--data-spy="affix" para que siga el scroll-->
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="bs-example-navbar-collapse-1">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+          <img src="Images/picturestlogo.svg" width="35" height="35" class="d-inline-block align-top" alt="">
+        </a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+        <div class="col-sm-6 col-md-6 pull-left">
+            <form id="tag" x-target="/image/tag" x-method="post" action="javascript:getImageByTag()" x-enctype="application/x-www-form-urlencoded" class="navbar-form">
+              <div class="form-group" style="display:inline;">
+                <div class="input-group">
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                  <input class="form-control" name="search" placeholder="Search Here" autocomplete="off" autofocus="autofocus" type="text" size=100>
+                </div>
+              </div>
+            </form>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="active"><a href="http://localhost:3000/static/Perfil.html">Home</a></li>
+          <li><a href="#">Following</a></li>
+          <li><a href="http://localhost:3000/static/profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-horizontal"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="http://localhost:3000/static/settings.html">Edit Profile</a></li>
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li><a><form class="form-logout" role="form">
+                <input type="submit" value="Logout" id="logout" class="btn btn-primary btn-lg">
+              </form>Log Out </a> </li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet" <="" head="">
+    <div class="container">
+      <h1 class=" text-center">Chat board</h1>
+    <div class="messaging">
+      <div class="inbox_msg">
+        <div class="inbox_people">
+          <div class="headind_srch">
+            <div class="users_heading">
+              <h4>Users</h4>
+            </div>
+          </div>
+          <div class="inbox_chat">
+            <div class="chat_list active_chat">
+              <div class="chat_people">
+                <div class="chat_img"> 
+                  <img src="Images/No-Profile.png" alt="sunil"> 
+                </div>
+                <div class="chat_ib">
+                  <h5>User 1<span class="chat_date">Date</span></h5>
+                  <p>Last message received</p>
+                </div>
+              </div>
+            </div>
+            <div class="chat_list">
+              <div class="chat_people">
+                <div class="chat_img"> 
+                  <img src="Images/No-Profile.png" alt="sunil"> 
+                </div>
+                <div class="chat_ib">
+                  <h5>User 2<span class="chat_date">Date</span></h5>
+                  <p>Last message received</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mesgs">
+          <div class="msg_history">
+            <div class="incoming_msg">
+              <div class="incoming_msg_img"> <img src="Images/No-Profile.png" alt="sunil"> 
+              </div>
+              <div class="received_msg">
+                <div class="received_withd_msg">
+                  <p>Hello</p>
+                  <span class="time_date"> Time    |    Date</span>
+                </div>
+              </div>
+            </div>
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p>Hi</p>
+                <span class="time_date"> Time    |    Date</span> 
+              </div>
+            </div>
+          </div>
+          <div class="type_msg">
+            <div class="input_msg_write">
+              <input type="text" class="write_msg" placeholder="Type a message" />
+              <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </body>
+</html>
