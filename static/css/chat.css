@@ -1,4 +1,7 @@
 html,
+.navbar{
+  margin: 0px;
+}
 .container{
   max-width:1170px; 
   margin:auto;
