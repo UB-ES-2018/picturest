@@ -253,7 +253,56 @@ Response
     "success": true    
 }
 ```
+- Follow user: ```PUT /user/follow/:username```
 
+Body:
+```
+{
+    "token": 435f4w3f...43t423g234
+
+}
+```
+Response
+```
+{
+    "success": true,
+    "follow": ["a", "b", ...]
+}
+```
+- Unfollow user: ```PUT /user/unfollow/:username```
+
+Body:
+```
+{
+    "token": 435f4w3f...43t423g234
+
+}
+```
+Response
+```
+{
+    "success": true,
+    "follow": ["a", ...]
+}
+```
+
+- Get user images: ``` GET/user/images```
+Return user owned images, pinned images and images based on interests
+
+Request headers (example):
+
+```
+x-access-token: 435f4w3f...43t423g234
+```
+Response
+```
+{
+    "success": true,
+    "msg": [
+        "5c0c1a7200495c45218ca61c"
+    ]
+}
+```
 ## Frontend
 
 ### How to use
