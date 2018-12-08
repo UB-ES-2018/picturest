@@ -17,6 +17,9 @@ const followCollection = "/user/followCollection/";
 const get_profile_desc = "/user/profileDesc";
 const get_profile_img = "/user/profileImg";
 const add_profile_img = "/user/addImg";
+const get_images = "/user/images";
+const follow_user = "/user/follow";
+const unfollow_user = "/user/unfollow";
 
 
 // Using chai
