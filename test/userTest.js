@@ -17,9 +17,9 @@ const followCollection = "/user/followCollection/";
 const get_profile_desc = "/user/profileDesc";
 const get_profile_img = "/user/profileImg";
 const add_profile_img = "/user/addImg";
-const get_images = "/user/images";
-const follow_user = "/user/follow";
-const unfollow_user = "/user/unfollow";
+const get_images = "/user/getImages";
+const follow_user = "/user/follow/jairo";
+const unfollow_user = "/user/unfollow/jairo";
 
 
 // Using chai
@@ -37,6 +37,12 @@ describe("\n\nIn the controllers/user.js", () => {
         email: 'nonexistent@gmail.com',
         password: '123',
         age: 50
+    }
+
+    let jairo = {
+        email: 'jairo@gmail.com',
+        password: '1234',
+        age: 23
     }
 
     // Remove if user exists
@@ -344,4 +350,106 @@ describe("\n\nIn the controllers/user.js", () => {
                 });
         });
     });
+
+    describe("GET /user/images", (done) => {
+        it("should return 200 if successfully and empty img", (done) => {
+            chai.request(server)
+            .post(login_url)
+            .send(validUser)
+            .end((error, response) => {
+                let token = response.body.token;
+
+                // GET /user/images
+                chai.request(server)
+                    .get(get_images)
+                    .set('x-access-token', token) // Set header
+                    .end((error, response) => {
+                        response.should.have.status(200);
+                        response.body.should.have.property('success').eql(true);
+                        response,body.should.have.property('img');
+                    });
+
+                done();
+            });
+        })
+    })
+
+    describe("PUT /user/follow", () => {
+        it("should return 200 and user jairo", (done) => {
+            chai.request(server)
+            .post(login_url)
+            .send(validUser)
+            .end((error, response) => {
+                let token = response.body.token;
+
+                chai.request(server)
+                .post(signup_url)
+                .send(jairo)
+                .end((error, response) => {
+                    response.should.have.status(200);
+                });
+
+                // PUT /user/follow
+                chai.request(server)
+                    .put(follow_user)
+                    .set('x-access-token', token) // Set header
+                    
+                    .end((error, response) => {
+                        response.should.have.status(200);
+                        response.body.should.have.property('success').eql(true);
+                        response.body.should.have.property('follow').eql(["jairo"]);
+                    });
+
+                done();
+            });
+        }) 
+    })
+
+    describe("PUT /user/unfollow", () => {
+        it("should return 200 and user []", (done) => {
+            chai.request(server)
+            .post(login_url)
+            .send(validUser)
+            .end((error, response) => {
+                let token = response.body.token;
+
+                // PUT /user/ufollow
+                chai.request(server)
+                    .put(unfollow_user)
+                    .set('x-access-token', token) // Set header
+                    
+                    .end((error, response) => {
+                        response.should.have.status(200);
+                        response.body.should.have.property('success').eql(true);
+                        response.body.should.have.property('follow').eql([""]);
+                    });
+
+                done();
+            });
+        }) 
+    })
+
+    describe("GET /user/images", () => {
+        it("should return 200 and user images(pinned, owned, interests)", () => {
+            chai.request(server)
+            .post(login_url)
+            .send(validUser)
+            .end((error, response) => {
+                let token = response.body.token;
+
+                // PUT /user/ufollow
+                chai.request(server)
+                    .get(get_images)
+                    .set('x-access-token', token) // Set header
+                    
+                    .end((error, response) => {
+                        response.should.have.status(200);
+                        response.body.should.have.property('success').eql(true);
+                        response.body.should.have.property('img').eql([]);
+                    });
+
+                done();
+            });
+        }) 
+    })
 });

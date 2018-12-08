@@ -552,10 +552,8 @@ exports.follow = function(req, res) {
 
     User.findOne({username: to_follow}).then((user, err) => {
         if (user) {
-            console.log(user)
             User.findOne({email: email}).then((user2, err) => {
                 if (user2) {
-                    console.log(user2)
                     if (!user2.follow.includes(to_follow)) {
                         user2.follow.push(to_follow)
                         user2.save().then(() => {
