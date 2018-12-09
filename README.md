@@ -303,6 +303,26 @@ Response
     ]
 }
 ```
+
+- Get user timeline: ``` GET/user/timelineInfo```
+Returns a timeline with the new photos of the users that I follow, of the collections that I follow and the photos that are within my interests
+
+Request headers (example):
+
+```
+x-access-token: 435f4w3f...43t423g234
+```
+Response
+```
+{
+    "success": true,
+    "imgs": [
+        "5c0c1a7200495c45218ca61c",
+        "...."
+    ]
+}
+```
+
 ## Frontend
 
 ### How to use
