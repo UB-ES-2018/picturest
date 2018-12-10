@@ -482,3 +482,145 @@ function interestsUser(){
     console.error(e)
   })
 }
+function getAllUsers(){
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/all"
+  let actualUser = getCookie("username")
+  let following = myFollows(); //LLISTA DE GENT A LA QUI SEGUEIXO TODO
+  console.log("ESTIC SEGUINT: ", following);
+
+  
+  superagent
+  .get(basePath + target)
+  .set('Content-Type', encType)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let get = res.body.users
+    console.log('GET', get[0].email)
+    var nom = "";
+    var users = [];
+    for(var i = 0; i <get.length; i++){
+      nom = get[i].email;
+      nom = nom.split("@")
+      nom = nom[0];
+
+      if (nom != actualUser){
+
+        var label = document.createElement("label");
+        label.className = nom;
+        label.textContent = nom;
+
+        if (following.includes(nom)){
+          var btn = document.createElement("BUTTON");
+          btn.id = nom
+          btn.textContent = "Unfollow";  
+          btn.style.height = "25px";
+          btn.style.width = "70px"
+          btn.style.backgroundColor = "#ef5a4a"
+          
+          btn.addEventListener("click", unfollowUser);
+          btn.param = nom;
+        }else{
+          var btn = document.createElement("BUTTON");
+          btn.id = nom
+          btn.textContent = "Follow";  
+          btn.style.height = "25px";
+          btn.style.width = "70px"
+          btn.style.backgroundColor = "#4286f4"
+          
+          btn.addEventListener("click", followUser);
+          btn.param = nom;
+        }
+        
+        
+  
+        var space = document.createElement("br");
+  
+        label.innerHTML += '  ';
+        label.appendChild(btn);
+  
+        document.querySelector("#people").append(label);
+        document.querySelector("#people").append(space);
+      }
+
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function followUser(evt){
+  let encType = "application/x-www-form-urlencoded" 
+  let username = evt.target.param;
+  let target = "/user/follow/" + username;
+  let token = getCookie("token");
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    console.log("USUARI SEGUIT : ", username)
+    let btn = document.getElementById(username);
+    btn.style.backgroundColor = "#ed4921"
+    btn.textContent = "Unfollow"
+    btn.addEventListener("click", unfollowUser);
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function unfollowUser(evt){
+  let encType = "application/x-www-form-urlencoded" 
+  let username = evt.target.param;
+  let target = "/user/unfollow/" + username;
+  let token = getCookie("token");
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    console.log("USUARI DEIXAT DE SEGUIR: ", username)
+    let btn = document.getElementById(username);
+    btn.style.backgroundColor = "#1da7f7"
+    btn.textContent = "Follow"
+    btn.addEventListener("click", followUser);
+
+    
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function myFollows(){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/myFollows";
+  let follows = []
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log("CORRECTE", JSON.stringify(res.body))
+    var mails = res.body;
+    var nom = "";
+    for (var i = 0; i < mails["mails"].length; i++){
+      nom = mails["mails"][i];
+      nom = nom.split("@");
+      nom = nom[0]
+      follows.push(nom)
+    }
+    
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+  return follows;
+}
