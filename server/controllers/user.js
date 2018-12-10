@@ -692,6 +692,33 @@ exports.getMyFollows = function(req, res) {
     })
 }
 
+/*
+ * Example: http://localhost:3000/user/profImg/jordi@jordi.io
+ */
+exports.getUserProfImg = function(req, res) {
+    let email = req.params.email
+
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            res.json({
+                success: true,
+                profile_img: user.profile_img
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "User not found"
+            })
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            error: "Unexpected error on server, user cannot be find"
+        })
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {
