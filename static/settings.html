@@ -208,7 +208,7 @@
               <i class="fa fa-check hidden"></i>
             </label>
           </div>
-          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+          <div id="testCollection" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
             <label class="image-checkbox">
               <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
               <input type="checkbox" name="image[]" value="" />
@@ -315,7 +315,7 @@
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
           <span>+</span>
         </button>
-        <button class="btn botonF2"  data-toggle="modal" data-target="#modalCollection">
+        <button class="btn botonF2"  data-toggle="modal" data-target="#modalCollection" onclick="javascript:loadUserImages()">
           <span>+</span>
         </button>
     </div>

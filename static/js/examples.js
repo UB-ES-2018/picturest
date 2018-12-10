@@ -482,3 +482,20 @@ function interestsUser(){
     console.error(e)
   })
 }
+
+function loadUserImages() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/images"
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)  
+  .then(res => {
+    console.log("Hola")
+  }).catch(e => {
+    console.log("Adeuu")
+  });
+}
+
