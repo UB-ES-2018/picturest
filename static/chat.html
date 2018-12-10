@@ -77,6 +77,8 @@
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
+    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet" <="" head="">
     <div class="container">
       <h1 class=" text-center">Chat board</h1>
@@ -113,6 +115,7 @@
             </div>
           </div>
         </div>
+        
         <div class="mesgs">
           <div class="msg_history">
             <div class="incoming_msg">
@@ -134,8 +137,14 @@
           </div>
           <div class="type_msg">
             <div class="input_msg_write">
-              <input type="text" class="write_msg" placeholder="Type a message" />
-              <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+
+              <form id="bar-msg" x-target="" x-method="" action="javascript:enviarMsg()" x-enctype="">
+                <div class="input-group">
+                  <input type="text" class="write_msg form-control" placeholder="Type a message" size=100 />
+                  <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                </div>
+              </form>
+              
             </div>
           </div>
         </div>

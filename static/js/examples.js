@@ -482,3 +482,12 @@ function interestsUser(){
     console.error(e)
   })
 }
+
+
+
+
+//Mensages de CHAT
+function enviarMsg(){
+  console.log("HOLA")
+}
+//End Mensages de CHAT
