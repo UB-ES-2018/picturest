@@ -499,6 +499,198 @@ exports.getAll = function (req, res) {
         }
     })
 }
+exports.getImages = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            let final = []
+            // Owned images
+            Image.find({user: email}).then((images, err) => {
+                if (images) {
+                    images.forEach(function(img) {
+                        if (!final.includes(img._id.toString())) {
+                            final.push(img._id.toString())
+                        }
+                    })
+                    console.log("Owned: " + final)
+                    // Pinned images 
+                    user.pins.forEach((img) => {
+                        if (!final.includes(img.toString())) {
+                            final.push(img.toString())
+                        }
+                    })
+                    console.log("Owned + Pinned: " + final)
+                    // images for interest
+                    let interest = user.interests;
+                    Image.find({}).then((images, err) => {
+                        if (images) {
+                            interest.forEach((tag) => {
+                                images.forEach(function(imge) {
+                                    if (!final.includes(imge._id.toString()) && imge.tag.toString().includes(tag).toString()) {
+                                        final.push(imge._id.toString())
+                                    }
+                                })
+                            })
+                            console.log("Owned + Pinned + Interests: " + final)
+                            res.json({
+                                success: true,
+                                msg: final
+                            })
+                        }
+                        if (err) {}
+                    })
+                }
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: "Failed in owned images"
+                    })
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "User not found"
+            })
+        }
+    })
+}
+
+exports.follow = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    let to_follow = req.params.username
+
+    console.log(email)
+    console.log(to_follow)
+
+    User.findOne({username: to_follow}).then((user, err) => {
+        if (user) {
+            User.findOne({email: email}).then((user2, err) => {
+                if (user2) {
+                    if (!user2.follow.includes(to_follow)) {
+                        user2.follow.push(to_follow)
+                        user2.save().then(() => {
+                            res.json({
+                                success: true,
+                                follow: user2.follow
+                            })
+                        })
+                        
+                    } else {
+                        res.json({
+                            success: false,
+                            msg: to_follow + " already followed."
+                        })
+                    }
+                }
+                else {
+                    res.json({
+                        success: false,
+                        error: "User not found or updated"
+                    })      
+                }
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "User to follow not found"
+            })
+        }
+    })
+}
+
+exports.unfollow = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    let to_follow = req.params.username
+
+    User.findOne({username: to_follow}).then((user, err) => {
+        if (user) {
+            User.findOne({email: email}).then((user2, err) => {
+                if (user2) {
+                    if (user2.follow.includes(to_follow)) {
+                        user2.follow.forEach((elem, i) => {
+                            if (elem === to_follow) {
+                                user2.follow.splice(i,1)
+                                user2.save().then(() => {
+                                    res.json({
+                                        success: true,
+                                        follow: user2.follow
+                                    })
+                                })
+                            }
+                        })
+                    } else {
+                        res.json({
+                            success: false,
+                            msg: to_follow + " not followed."
+                        })
+                    }
+                }
+                if (err) {
+                    res.json({
+                        success: false,
+                        error: "User not found or updated"
+                    })      
+                }
+            })
+        }
+        else {
+            res.json({
+                success: false,
+                error: "User to follow not found"
+            })
+        }
+    })
+}
+
+exports.getMyFollows = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            let tmp = user.follow
+            let tmp_mails = []
+            tmp.forEach((usr, i) => {
+                User.findOne({username: usr}).then((u,e) => {
+                    if (u) {
+                        tmp_mails.push(u.email)
+                        if (i == tmp.length-1) {
+                            res.json({
+                                success: true,
+                                mails: tmp_mails
+                            })
+                        }
+                    }
+                })
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+
+                error: "User not found"
+            })
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            error: "Unexpected error on server, user cannot be find"
+        })
+    })
+}
 
 exports.middleware = function (app) {
     // route middleware to verify a token
