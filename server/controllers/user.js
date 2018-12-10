@@ -478,6 +478,28 @@ exports.getProfileDesc = function(req, res) {
     })
 }
 
+// GET /user/all
+exports.getAll = function (req, res) {
+    User.find({}).then((user, err) => {
+        if (user) {
+            let id = []
+            user.forEach((usr) => {
+                id.push({id: usr._id, email: usr.email})
+            })
+            res.json({
+                success: true,
+                users: id
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "Cannot find."
+            })
+        }
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {

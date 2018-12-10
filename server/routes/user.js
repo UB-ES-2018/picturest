@@ -5,7 +5,7 @@ module.exports = function (app) {
     app.post('/login', user.login)
     app.post('/signup', user.signup)
     app.get('/logout', user.logout)
-
+    app.get('/user/all', user.getAll)
     // From now on all calls must be authenticated.
     user.middleware(app)
 
