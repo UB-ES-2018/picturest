@@ -175,47 +175,25 @@
       </div>
 
       <div class="modal fade" id="modalCollection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="container">
-          <h3>Bootstrap image checkbox(multiple)</h3>
-          <div>
-            <input type="text">
-          </div>
-          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
-            <label class="image-checkbox">
-              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
-              <input type="checkbox" name="image[]" value="" />
-              <i class="fa fa-check hidden"></i>
-            </label>
-          </div>
-          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
-            <label class="image-checkbox">
-              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
-              <input type="checkbox" name="image[]" value="" />
-              <i class="fa fa-check hidden"></i>
-            </label>
-          </div>
-          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
-            <label class="image-checkbox">
-              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
-              <input type="checkbox" name="image[]" value="" />
-              <i class="fa fa-check hidden"></i>
-            </label>
-          </div>
-          <div class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
-            <label class="image-checkbox">
-              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
-              <input type="checkbox" name="image[]" value="" />
-              <i class="fa fa-check hidden"></i>
-            </label>
-          </div>
-          <div id="testCollection" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
-            <label class="image-checkbox">
-              <img class="img-responsive" src="https://dummyimage.com/600x400/000/fff" />
-              <input type="checkbox" name="image[]" value="" />
-              <i class="fa fa-check hidden"></i>
-            </label>
-          </div>        
-        </div>   
+        <form id="collection-upload" method="" x-target="/user" x-method="post" action="javascript:addCollection()" x-enctype="multipart/form-data" class="box">
+
+
+            <div class="container">
+                <h3 style="color:red;">Selecciona imagenes para tu colección</h3>
+                <div>
+                  <input type="text" id ="collection-name" placeholder="Nombre de tu colección">
+                </div>
+                <div>
+                  <textarea id ="collection-description" aria-invalid="false" style="resize:none" rows="6" cols="30" placeholder="Descripcion de tu colección"></textarea>
+                </div>
+                <div id="testCollection" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+                </div>   
+                <input type="submit">
+            </div> 
+
+
+
+        </form>        
       </div>
       
     <!-- Navigator bar-->

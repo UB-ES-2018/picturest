@@ -493,9 +493,73 @@ function loadUserImages() {
   .set('x-access-token', token)
   .set('Content-Type', encType)  
   .then(res => {
-    console.log("Hola")
+    let ids = res.body.msg
+    let idsLen= ids.length
+    for (let id=0; id<idsLen ; id++){
+      let source = basePath +"/image/"+ ids[id]
+      console.log("-",source)
+      
+      var img = document.createElement("img");
+      img.src= source;
+      img.className = "img-responsive";
+
+      var etiqueta = document.createElement("label");
+      etiqueta.className = "image-checkbox";
+
+      var check = document.createElement("input");
+      check.setAttribute("type", "checkbox");
+      check.name = "image[]";
+      check.value = ids[id];
+
+      var i = document.createElement("i");
+      i.className = "fa fa-check hidden";
+
+      etiqueta.appendChild(img);
+      etiqueta.appendChild(check);
+      etiqueta.appendChild(i);
+
+
+      document.querySelector('#testCollection').appendChild(etiqueta);
+    }
   }).catch(e => {
     console.log("Adeuu")
   });
 }
 
+function addCollection() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/addCollection"
+
+  let description = document.querySelector('#collection-description').value
+  let title = document.querySelector('#collection-name').value
+  var checkedList = document.querySelectorAll("input[name^='image[']:checked")
+  let imageIds = ""
+  let data = {}  
+
+  for (let i=0; i<checkedList.length - 1 ; i++){
+    imageIds += checkedList[i].value + " "
+  }
+  imageIds += checkedList[checkedList.length-1].value
+
+
+  data = {
+    name : title,
+    images : imageIds,
+    description : description,
+    token : token
+  }
+
+  superagent
+  .post(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .send(data)
+  .then(function(res) {
+    alert("Vamos Bien")
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+
+}
