@@ -24,6 +24,7 @@ module.exports = function (app) {
     app.put('/user/follow/:username', user.follow)
     app.put('/user/unfollow/:username', user.unfollow)
     app.get('/user/myFollows', user.getMyFollows)
+    app.get('/user/profImg/:email', user.getUserProfImg)
 
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)
