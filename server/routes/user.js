@@ -23,6 +23,7 @@ module.exports = function (app) {
     app.get('/user/images', user.getImages)
     app.put('/user/follow/:username', user.follow)
     app.put('/user/unfollow/:username', user.unfollow)
+    app.get('/user/myFollows', user.getMyFollows)
 
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)

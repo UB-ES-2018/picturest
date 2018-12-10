@@ -633,6 +633,43 @@ exports.unfollow = function(req, res) {
     })
 }
 
+exports.getMyFollows = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            let tmp = user.follow
+            let tmp_mails = []
+            tmp.forEach((usr, i) => {
+                User.findOne({username: usr}).then((u,e) => {
+                    if (u) {
+                        tmp_mails.push(u.email)
+                        if (i == tmp.length-1) {
+                            res.json({
+                                success: true,
+                                mails: tmp_mails
+                            })
+                        }
+                    }
+                })
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "User not found"
+            })
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            error: "Unexpected error on server, user cannot be find"
+        })
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {
