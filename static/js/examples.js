@@ -518,8 +518,8 @@ function loadUserImages() {
       etiqueta.appendChild(check);
       etiqueta.appendChild(i);
 
-
-      document.querySelector('#testCollection').appendChild(etiqueta);
+      var columna = '#testCollection' + ((id%4) +1)
+      document.querySelector(columna).appendChild(etiqueta);
     }
   }).catch(e => {
     console.log("Adeuu")
