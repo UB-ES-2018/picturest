@@ -57,7 +57,7 @@ io.on('connection', function (socket) {
         }).catch((err) => { console.log(err) });
 
         // Try to emit message if user is connected or not
-        socket.emit(data.to, message);
+        io.emit(data.to, message);
 
         console.log(data);
     });
@@ -80,7 +80,7 @@ io.on('connection', function (socket) {
                 });
             }
 
-            socket.emit(email,
+            io.emit(email,
                 {
                     messages: messages
                 });
