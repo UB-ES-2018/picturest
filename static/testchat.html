@@ -10,8 +10,8 @@
 <script>
 
     // CAMBIAR EL USUARIO Y TOKEN PARA TESTEAR
-    const user = 'jose@gmail.com';
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMDNiNmIxZGI2YjBkMTA5YjYzYjc4MSIsImVtYWlsIjoiam9zZUBnbWFpbC5jb20iLCJpYXQiOjE1NDM3NjE4MDYsImV4cCI6MTU0Mzg0ODIwNn0.OuEXRp8LcUGS74axE3Z1lXIPFFnuRvHoHaGNWfHA8Oo';
+    const user = 'eddy@eddy.com';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGY4ZGE2NGM4MGZmNTRjZWI1ZWU2YSIsImVtYWlsIjoiZWphaXJvQGVqYWlyby5jb20iLCJpYXQiOjE1NDQ1MjMyMjIsImV4cCI6MTU0NDYwOTYyMn0.egfWg9eVU2BA9vAecawVK3P-DZpEhM5r09oEmsI-fWI';
     // --------------------------------------------
 
     var socket = io.connect('http://localhost:8080', { forceNew: true });
@@ -29,7 +29,7 @@
         {
             token: token
         });
-
+    
     // Comprobar siempre si hay algún mensaje para mi
     socket.on(user, function (data) {
         console.log(data);

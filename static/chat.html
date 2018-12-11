@@ -8,6 +8,7 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <script src="js/superagent.js"></script>
       <script src="js/examples.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
   <title>Chat</title>
   <link href="css/chat.css" rel="stylesheet">
 </head>
@@ -85,23 +86,29 @@
     <div class="messaging">
       <div class="inbox_msg">
         <div class="inbox_people">
+
           <div class="headind_srch">
             <div class="users_heading">
               <h4>Users</h4>
             </div>
           </div>
-          <div class="inbox_chat">
+          
+          <div id = inbox-chat class="inbox_chat">
+
             <div class="chat_list active_chat">
               <div class="chat_people">
+                
                 <div class="chat_img"> 
                   <img src="Images/No-Profile.png" alt="sunil"> 
                 </div>
+
                 <div class="chat_ib">
-                  <h5>User 1<span class="chat_date">Date</span></h5>
-                  <p>Last message received</p>
+                  <h5>User 1<!--<span class="chat_date">Date</span>--></h5>
+                  <!--<p>Last message received</p>-->
                 </div>
               </div>
             </div>
+
             <div class="chat_list">
               <div class="chat_people">
                 <div class="chat_img"> 
@@ -113,34 +120,22 @@
                 </div>
               </div>
             </div>
+
           </div>
+
         </div>
         
         <div class="mesgs">
-          <div class="msg_history">
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="Images/No-Profile.png" alt="sunil"> 
-              </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>Hello</p>
-                  <span class="time_date"> Time    |    Date</span>
-                </div>
-              </div>
-            </div>
-            <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>Hi</p>
-                <span class="time_date"> Time    |    Date</span> 
-              </div>
-            </div>
+          <div id= "historial-msg" class="msg_history">
+
           </div>
           <div class="type_msg">
+            
             <div class="input_msg_write">
 
               <form id="bar-msg" x-target="" x-method="" action="javascript:enviarMsg()" x-enctype="">
                 <div class="input-group">
-                  <input type="text" class="write_msg form-control" placeholder="Type a message" size=100 />
+                  <input id=bar-mensaje type="text" class="write_msg form-control" autocomplete="off" placeholder="Type a message" size=100 />
                   <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                 </div>
               </form>
@@ -151,5 +146,6 @@
       </div>
     </div>
     </div>
+
   </body>
 </html>
