@@ -147,9 +147,7 @@
         
     </head>
 
-    <body>
-
-        
+    <body onload="javascript:loadCollections()">        
       <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -186,13 +184,13 @@
                 <div>
                   <textarea id ="collection-description" aria-invalid="false" style="resize:none" rows="6" cols="30" placeholder="Descripcion de tu colección"></textarea>
                 </div>
-                <div id="testCollection1" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+                <div id="modalCollectionCol1" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
                 </div>
-                <div id="testCollection2" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+                <div id="modalCollectionCol2" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
                 </div> 
-                <div id="testCollection3" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+                <div id="modalCollectionCol3" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
                 </div> 
-                <div id="testCollection4" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+                <div id="modalCollectionCol4" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
                 </div>    
                 <input type="submit">
             </div> 
@@ -293,8 +291,24 @@
           Write your interests
         </form>
         <textarea rows="4" cols="50" name="int-user" form="interests-user"></textarea>
+    </div>
+
+    <div class="container">
+      <div>
+        <h3>Collections</h3>
       </div>
-    
+      <div>
+          <div id="collectionCol1" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+          </div>
+          <div id="collectionCol2" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+          </div> 
+          <div id="collectionCol3" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+          </div> 
+          <div id="collectionCol4" class="col-xs-4 col-sm-3 col-md-2 nopad text-center">
+          </div> 
+      </div>
+         
+    </div>     
     <div class="contenedor">
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
           <span>+</span>

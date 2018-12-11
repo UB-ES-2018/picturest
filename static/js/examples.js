@@ -518,7 +518,7 @@ function loadUserImages() {
       etiqueta.appendChild(check);
       etiqueta.appendChild(i);
 
-      var columna = '#testCollection' + ((id%4) +1)
+      var columna = '#modalCollectionCol' + ((id%4) +1)
       document.querySelector(columna).appendChild(etiqueta);
     }
   }).catch(e => {
@@ -561,5 +561,43 @@ function addCollection() {
   .catch(function(e) {
     console.error(e)
   })
+}
 
+function loadCollections() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadCollections"
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .then(function(res) {
+    for (let c=0; c<res.body.length; c++){
+
+      //Nombre collection
+      var etiqueta = document.createElement("label");
+      var i = document.createElement("i");
+      i.textContent = res.body[c].name;
+      etiqueta.appendChild(i);
+
+      
+
+      //Imagen Collection
+      let source = basePath +"/image/"+ res.body[c].images[0]
+      var img = document.createElement("img");
+      img.src= source;
+      img.className = "img-responsive";
+      etiqueta.appendChild(img);
+      
+
+      var columna = '#collectionCol' + ((c%4) +1)
+      document.querySelector(columna).appendChild(etiqueta);
+
+
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
 }
