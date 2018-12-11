@@ -3,7 +3,6 @@ var Image = require('../models/image')
 var Collection = require('../models/collection')
 var jwt = require('jsonwebtoken')
 
-
 // registers new user
 exports.signup = function (req, res) {
     // get body
@@ -504,4 +503,4 @@ exports.middleware = function (app) {
         }
     })
 }
-  
+
