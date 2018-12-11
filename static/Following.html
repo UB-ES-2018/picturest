@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html >
     <style>
     
     * {
@@ -181,6 +181,24 @@ transform:translatey(0);
 textarea {
   resize: none;
 }
+
+#followBtn {
+    background-color: #f5461b;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    width: 250px;
+    height: 40px;
+    position: absolute;
+    top: 20%;
+    left: 8%;
+}
+
+#people {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+}
+
+
 </style>
     
     <head>
@@ -198,7 +216,7 @@ textarea {
         
     </head>
 
-    <body onload="getAllUsers()" >
+    <body>
 
         
         <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -290,7 +308,9 @@ textarea {
       </div><!-- /.navbar-collapse -->
     </nav>
 
-    <h2>People to follow</h2>
+    <button id="followBtn" type="button" >People to follow</button>
+    <br> </br>
+
     <ul id="people">
 
     </ul> 
@@ -305,8 +325,19 @@ textarea {
     </body>
 </html>
 
+<script src="http://code.jquery.com/jquery.js"></script>
 <script>    
+    var activat = true;
+    var btn_follow = document.getElementById("followBtn");
+    btn_follow.style.color = 'white';
+    btn_follow.onclick = function(){
+        getAllUsers();
+        btn_follow.disabled = "true"
+
+    }
+
     $('.botonF1').click(function(){
         $('.btn').addClass('animacionVer');
     })
+
 </script>

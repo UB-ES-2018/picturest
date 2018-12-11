@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.post('/signup', user.signup)
     app.get('/logout', user.logout)
     app.get('/user/all', user.getAll)
+    app.get('/user/profImg/:email', user.getUserProfImg)
     // From now on all calls must be authenticated.
     user.middleware(app)
 
@@ -24,7 +25,6 @@ module.exports = function (app) {
     app.put('/user/follow/:username', user.follow)
     app.put('/user/unfollow/:username', user.unfollow)
     app.get('/user/myFollows', user.getMyFollows)
-    app.get('/user/profImg/:email', user.getUserProfImg)
 
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)

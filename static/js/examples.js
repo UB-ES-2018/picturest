@@ -482,12 +482,19 @@ function interestsUser(){
     console.error(e)
   })
 }
+
+/* 
+Inici funció getAllUsers() --> Aquesta funció es crida des de l'HTML per tal de carregar els usuaris ja registrats.
+Es fa una consulta per tal de saber tots els usuaris disponibles, es comprova si ja es segueixen o no i en funció 
+d'aixó apareixerà un botó de follow o unfollow, així com mostrar el nom de cada usuari i la seva foto de perfil.
+*/
 function getAllUsers(){
   let encType = "application/x-www-form-urlencoded" 
   let target = "/user/all"
   let actualUser = getCookie("username")
-  let following = myFollows(); //LLISTA DE GENT A LA QUI SEGUEIXO TODO
+  let following = myFollows();
   console.log("ESTIC SEGUINT: ", following);
+  console.log("ESTIC SEGUINT[0]: ", following.indexOf(0));
 
   
   superagent
@@ -498,17 +505,34 @@ function getAllUsers(){
     let get = res.body.users
     console.log('GET', get[0].email)
     var nom = "";
-    var users = [];
-    for(var i = 0; i <get.length; i++){
-      nom = get[i].email;
+    var email = ""
+    for(let i = 0; i <get.length; i++){
+      nom = get[i]["email"];
+      email = get[i]["email"];
       nom = nom.split("@")
       nom = nom[0];
 
       if (nom != actualUser){
 
         var label = document.createElement("label");
+        label.id = nom;
         label.className = nom;
         label.textContent = nom;
+        label.style.marginLeft = "10px"
+        console.log("NOM: ", nom);
+        console.log("includes??: ", following.includes(nom));
+        console.log("ESTAT ACTUAL DE FOLLOWING ", following);
+
+        var photo = document.createElement("img");
+        photo.id = "photo"+nom;
+        photo.src = "Images/No-Profile.png"
+        photo.length = "70"
+        photo.width = "70"
+        photo.style.marginLeft = "20px"
+
+        label.append(photo);
+
+        getProfileImage(email, nom)
 
         if (following.includes(nom)){
           var btn = document.createElement("BUTTON");
@@ -516,6 +540,7 @@ function getAllUsers(){
           btn.textContent = "Unfollow";  
           btn.style.height = "25px";
           btn.style.width = "70px"
+          btn.style.color = "white"
           btn.style.backgroundColor = "#ef5a4a"
           
           btn.addEventListener("click", unfollowUser);
@@ -527,18 +552,19 @@ function getAllUsers(){
           btn.style.height = "25px";
           btn.style.width = "70px"
           btn.style.backgroundColor = "#4286f4"
+          btn.style.color = "white"
           
           btn.addEventListener("click", followUser);
           btn.param = nom;
         }
         
-        
-  
-        var space = document.createElement("br");
+        let space = document.createElement("br");
   
         label.innerHTML += '  ';
         label.appendChild(btn);
-  
+        
+        //document.querySelector("#label").append(photo);
+        document.querySelector("#people").append(btn);
         document.querySelector("#people").append(label);
         document.querySelector("#people").append(space);
       }
@@ -548,8 +574,9 @@ function getAllUsers(){
   .catch(function(e) {
     console.error(e)
   })
-}
+} // Fi funció getAllUsers()
 
+// Inici funció followUser() --> funció cridada al apretar el botó follow per tal de seguir un usuari.
 function followUser(evt){
   let encType = "application/x-www-form-urlencoded" 
   let username = evt.target.param;
@@ -563,16 +590,18 @@ function followUser(evt){
   .then(function(res) {
     console.log(JSON.stringify(res.body))
     console.log("USUARI SEGUIT : ", username)
-    let btn = document.getElementById(username);
+    var btn = document.getElementById(username);
     btn.style.backgroundColor = "#ed4921"
     btn.textContent = "Unfollow"
+    btn.style.color = "white"
     btn.addEventListener("click", unfollowUser);
   })
   .catch(function(e) {
     console.error(e)
   })
-}
+} // Fi funció followUser()
 
+// Inici funció unfollowUser() --> funció cridada al apretar el botó unfollow per tal de deixar de seguir un usuari.
 function unfollowUser(evt){
   let encType = "application/x-www-form-urlencoded" 
   let username = evt.target.param;
@@ -586,20 +615,21 @@ function unfollowUser(evt){
   .then(function(res) {
     console.log(JSON.stringify(res.body))
     console.log("USUARI DEIXAT DE SEGUIR: ", username)
-    let btn = document.getElementById(username);
-    btn.style.backgroundColor = "#1da7f7"
+    var btn = document.getElementById(username);
+    btn.style.backgroundColor = "#4286f4"
     btn.textContent = "Follow"
     btn.addEventListener("click", followUser);
 
-    
   })
   .catch(function(e) {
     console.error(e)
   })
-}
+} // Fi funció unfollowUser()
 
+// Inici funció myFollows() --> retorna un array amb els noms de tots els usuaris als qui segueix l'usuari loguejat actualment.
 function myFollows(){
   let token = getCookie("token")
+  console.log("TOKEN ACTUAL!", token)
   let encType = "application/x-www-form-urlencoded" 
   let target = "/user/myFollows";
   let follows = []
@@ -607,20 +637,55 @@ function myFollows(){
   superagent
   .get(basePath + target)
   .set('x-access-token', token)
+  .set('Content-Type', )
   .then(function(res) {
     console.log("CORRECTE", JSON.stringify(res.body))
     var mails = res.body;
     var nom = "";
-    for (var i = 0; i < mails["mails"].length; i++){
+    for (let i = 0; i < mails["mails"].length; i++){
       nom = mails["mails"][i];
       nom = nom.split("@");
       nom = nom[0]
       follows.push(nom)
-    }
-    
+    }    
+    console.log("DES DE SUPERAGENT")
   })
   .catch(function(e) {
     console.error(e)
   })
+  console.log("DES DE RETURN")
   return follows;
-}
+} // Fi funció myFollows()
+
+// Inici funció getProfileImage() --> entrat un email, retorna la foto de perfil de l'usuari amb l'email corresponent.
+function getProfileImage(email, nom){
+  let mail = email
+  let name =  nom
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profImg/"+mail;
+  var fotoID = "";
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log("FOTO", JSON.stringify(res.body))
+    let foto = res.body;
+    fotoID = foto["profile_img"];
+    var photo = document.createElement("img");
+
+    if (fotoID.length == 0){
+      photo.src = "Images/No-Profile.png";
+      document.querySelector("#photo"+name).src = photo.src;
+    }else{
+      let source = basePath+"/image/"+fotoID
+      photo.src = source;
+      document.querySelector("#photo"+name).src = photo.src
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+
+} // Fi funció getProfileImage()
