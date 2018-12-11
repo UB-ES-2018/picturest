@@ -14,7 +14,7 @@
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMDNiNmIxZGI2YjBkMTA5YjYzYjc4MSIsImVtYWlsIjoiam9zZUBnbWFpbC5jb20iLCJpYXQiOjE1NDM3NjE4MDYsImV4cCI6MTU0Mzg0ODIwNn0.OuEXRp8LcUGS74axE3Z1lXIPFFnuRvHoHaGNWfHA8Oo';
     // --------------------------------------------
 
-    var socket = io.connect('http://localhost:8080', { forceNew: true });
+    var socket = io.connect('http://localhost:3000', { forceNew: true });
 
     // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
     socket.emit('new-message',
