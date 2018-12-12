@@ -20,6 +20,7 @@ module.exports = function (app) {
     app.put('/user/followCollection/', user.followCollection)
     app.get('/user/profileImg', user.getProfileImage)
     app.get('/user/profileDesc', user.getProfileDesc)
+    app.get('/user/images', user.getImages)
 
     //app.put('/user/:id', user.update)
     //app.delete('/user/:id', user.delete)

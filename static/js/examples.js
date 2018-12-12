@@ -482,3 +482,148 @@ function interestsUser(){
     console.error(e)
   })
 }
+
+function loadUserImages() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/images"
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)  
+  .then(res => {
+    let ids = res.body.msg
+    let idsLen= ids.length
+    for (let id=0; id<idsLen ; id++){
+      let source = basePath +"/image/"+ ids[id]
+      console.log("-",source)
+      
+      var img = document.createElement("img");
+      img.src= source;
+      img.className = "img-responsive";
+
+      var etiqueta = document.createElement("label");
+      etiqueta.className = "image-checkbox";
+
+      var check = document.createElement("input");
+      check.setAttribute("type", "checkbox");
+      check.name = "image[]";
+      check.value = ids[id];
+
+      var i = document.createElement("i");
+      i.className = "fa fa-check hidden";
+
+      etiqueta.appendChild(img);
+      etiqueta.appendChild(check);
+      etiqueta.appendChild(i);
+
+      var columna = '#modalCollectionCol' + ((id%4) +1)
+      document.querySelector(columna).appendChild(etiqueta);
+    }
+  }).catch(e => {
+    console.log("Adeuu")
+  });
+}
+
+function addCollection() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/addCollection"
+
+  let description = document.querySelector('#collection-description').value
+  let title = document.querySelector('#collection-name').value
+  var checkedList = document.querySelectorAll("input[name^='image[']:checked")
+  let imageIds = ""
+  let data = {}  
+
+  for (let i=0; i<checkedList.length - 1 ; i++){
+    imageIds += checkedList[i].value + " "
+  }
+  imageIds += checkedList[checkedList.length-1].value
+
+
+  data = {
+    name : title,
+    images : imageIds,
+    description : description,
+    token : token
+  }
+
+  superagent
+  .post(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .send(data)
+  .then(function(res) {
+    $('#modalCollection').modal('hide');
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function loadCollections() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadCollections"
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .then(function(res) {
+    for (let c=0; c<res.body.length; c++){
+
+      //Nombre collection
+      var etiqueta = document.createElement("label");
+      var i = document.createElement("i");
+      i.textContent = res.body[c].name;
+      etiqueta.appendChild(i);      
+
+      //Imagen Collection
+      let source = basePath +"/image/"+ res.body[c].images[0]
+      var img = document.createElement("img");
+      img.src= source;
+      img.className = "img-responsive";
+      img.setAttribute('data-toggle', 'modal');
+      img.setAttribute('data-target', '#showCollection');
+      img.setAttribute('onclick', 'javascript:showCollection(' + c + ')');
+      etiqueta.appendChild(img);
+      
+      //añadir a la capa correspondiente
+      var columna = '#collectionCol' + ((c%4) +1)
+      document.querySelector(columna).appendChild(etiqueta);
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function showCollection(indice){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadCollections"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .then(function(res) {
+      document.querySelector('#showCollectionTitle').textContent = res.body[indice].name
+      document.querySelector('#showCollectionDesc').textContent = res.body[indice].description
+      for (let c=0; c<res.body[indice].images.length; c++){
+        let source = basePath +"/image/"+ res.body[indice].images[c]
+        var img = document.createElement("img");
+        img.src= source;
+        img.className = "img-responsive";        
+        var columna = '#showCollectionCol' + ((c%4) +1)
+        document.querySelector(columna).innerHTML = img.outerHTML
+      
+      }      
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
