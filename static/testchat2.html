@@ -10,8 +10,8 @@
 <script>
 
     // CAMBIAR EL USUARIO Y TOKEN PARA TESTEAR
-    const user = 'jairo@gmail.com';
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGZiOWMxOWViYzMzMDg5YmU5ZTIzYyIsImVtYWlsIjoiamFpcm9AZ21haWwuY29tIiwiaWF0IjoxNTQ0NTM2Njk5LCJleHAiOjE1NDQ2MjMwOTl9.LYOdIy28yGewlyEgckgOk2gOfe71UO_-AngVgwsSbnM';
+    const user = 'ejairo@ejairo.com';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGZjMDc0NTQxYTQ2NGViNjhiZDE2YiIsImVtYWlsIjoiZWphaXJvQGVqYWlyby5jb20iLCJpYXQiOjE1NDQ1ODYzNDMsImV4cCI6MTU0NDY3Mjc0M30.6hfxTSDve0u4Ue_sFFM6QkkOl3FeurBT-Mec1mozTNY';
     // --------------------------------------------
 
     var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
@@ -20,8 +20,8 @@
     socket.emit('new-message',
         {
             token: token,
-            to: 'jose@gmail.com',
-            message: 'Hola soy Jairo'
+            to: 'eddy@eddy.com',
+            message: 'Hola soy JAIRO'
         });
 
     // Chequear mensajes pendientes

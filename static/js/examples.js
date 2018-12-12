@@ -554,9 +554,10 @@ function destinatacioMsg(user){
 
 //Mensages de CHAT
 function enviarMsg(user){
+  console.log("Envio mensaje a: " , user)
   let token = getCookie("token")
-  console.log(token)
-  var socket = io.connect('http://localhost:8080', { forceNew: true });
+  var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
+
   // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
   socket.emit('new-message',
       {
@@ -589,47 +590,6 @@ function enviarMsg(user){
   d.appendChild(d2);
 
   document.querySelector('#historial-msg').appendChild(d);
-  
-  // Chequear mensajes pendientes
-  /*socket.emit('pending-message',
-      {
-          token: token
-      });*/
-  
-  
-  // Comprobar siempre si hay algún mensaje para mi
-  socket.on("eddy@eddy.com", function (data) {
-      console.log(data);
-
-      //añadir mensaje recidos
-      if(data.from && data.from /*!= getCookie('username')*/){
-        var dr = document.createElement("div");
-        d.className = "outgoing_msg";
-        
-        var dr2 = document.createElement("div");
-        d2.className= "sent_msg";
-      
-        var pr = document.createElement("p");
-        
-        var mr = document.createTextNode(data.message);
-      
-        var sr = document.createElement("span");
-        sr.className = "time_date"
-        var fechar = document.createTextNode(data.date)
-      
-        var pinr = document.createTextNode("Pin");
-      
-        pr.appendChild(mr);
-        sr.appendChild(fechar);
-        dr2.appendChild(pr);
-        dr2.appendChild(sr);
-        dr.appendChild(dr2);
-
-        document.querySelector('#historial-msg').appendChild(dr);
-
-      }
-      
-  });
   
   document.querySelector('#bar-mensaje').value = "";
 }
