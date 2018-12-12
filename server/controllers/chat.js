@@ -1,23 +1,11 @@
 // Socket.io API
-var app = require('../../app');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('../../app').io;
 
 // For storing chat
 var Chat = require('../models/chat');
 
 // For decoding token
 var jwt = require('jsonwebtoken');
-
-// HTTP for websockets PORT
-const socketPort = 8080;
-
-server.listen(socketPort, function () {
-    console.log("Server HTTP for websockets running on port " + socketPort)
-});
-
-// Users Online
-var onlineUsers = [];
 
 // On Connect
 io.on('connection', function (socket) {
@@ -69,7 +57,7 @@ io.on('connection', function (socket) {
         }).catch((err) => { console.log(err) });
 
         // Try to emit message if user is connected or not
-        socket.emit(data.to, message);
+        io.emit(data.to, message);
 
         console.log(data);
     });
@@ -92,7 +80,7 @@ io.on('connection', function (socket) {
                 });
             }
 
-            socket.emit(email,
+            io.emit(email,
                 {
                     messages: messages
                 });

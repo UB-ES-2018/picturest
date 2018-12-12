@@ -10,18 +10,25 @@
 <script>
 
     // CAMBIAR EL USUARIO Y TOKEN PARA TESTEAR
-    const user = 'eddy@eddy.com';
+
+    const user = 'jose@gmail.com';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGZiOTA0ZThkNjZkMDgxZWZjY2VlYiIsImVtYWlsIjoiam9zZUBnbWFpbC5jb20iLCJpYXQiOjE1NDQ1MzY3NjEsImV4cCI6MTU0NDYyMzE2MX0.1yl6Eys6O3en83znVpACLKz1wY_HMOtEZqW3tdRlCsk';
+    // --------------------------------------------
+
+    var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
+    /*const user = 'eddy@eddy.com';
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGZjMDc0NTQxYTQ2NGViNjhiZDE2YiIsImVtYWlsIjoiZWphaXJvQGVqYWlyby5jb20iLCJpYXQiOjE1NDQ1MzYxODYsImV4cCI6MTU0NDYyMjU4Nn0.FyHsvX-2dlL7cfSb4CqKpFjqTuPmw6SpAVrA4o1Byao';
     // --------------------------------------------
     console.log(token)
-    var socket = io.connect('http://localhost:8080', { forceNew: true });
+    var socket = io.connect('http://localhost:8080', { forceNew: true });*/
+
 
     // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
     socket.emit('new-message',
         {
             token: token,
-            to: user,
-            message: 'Hola qué tal?'
+            to: 'jairo@gmail.com',
+            message: 'Hola qué tal? Soy Jose'
         });
     
     // Chequear mensajes pendientes
