@@ -669,12 +669,12 @@ exports.timelineInfo = function(req, res) {
     var match = function (haystack, arr) {
         return arr.some(function (v) {
             return haystack.indexOf(v) >= 0;
-        });
-    };
+        })
+    }
 
     User.findOne({email: email}).then((user,err) => {
         if (user) {
-            
+
             let images_follow = []
             let follow_emails = []
             let _interests = user.interests;
@@ -691,9 +691,9 @@ exports.timelineInfo = function(req, res) {
                     })
                 }
             })
-            
+
             images_follow.concat(_collections);
-            
+
 
             // get following emails
             user.follow.forEach((uname) => {
@@ -704,7 +704,7 @@ exports.timelineInfo = function(req, res) {
                 })
             })
 
-            setTimeout(function() { 
+            setTimeout(function () {
                 // Get images
                 Image.find({}).then((images, errorImages) => {
                     if (images) {
@@ -717,7 +717,7 @@ exports.timelineInfo = function(req, res) {
                             if (match(imag.tag, _interests) & !images_follow.includes(imag._id)) {
                                 images_follow.push(imag._id)
                             }
-                            
+
                         })
                         res.json({
                             success: true,
@@ -739,6 +739,8 @@ exports.timelineInfo = function(req, res) {
                 })
             }, 2000);
         }
+    })
+}
 
 /*
  * Example: http://localhost:3000/user/profImg/jordi@jordi.io
@@ -763,10 +765,9 @@ exports.getUserProfImg = function(req, res) {
     }).catch(() => {
         res.json({
             success: false,
-            msg: "Unexpected error"
-                error: "User not found"
+            msg: "Unexpected error",
+            error: "User not found"
             })
-        }
     }).catch((err) => {
         res.json({
             success: false,
@@ -839,4 +840,3 @@ exports.middleware = function (app) {
         }
     })
 }
-
