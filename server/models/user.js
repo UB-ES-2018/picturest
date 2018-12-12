@@ -58,6 +58,9 @@ var UserSchema = new mongoose.Schema({
     },
     collections: {
         type: [String]
+    },
+    follow: {
+        type: [String]
     }
 })
 

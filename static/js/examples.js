@@ -1,9 +1,9 @@
 'use strict'
 
-const basePath = 'http://localhost:3000'
-
-let token = ''
-let aux = ''
+const basePath = 'http://localhost:3000';
+const user = 'ejairo@ejairo.com';
+let token = '';
+let aux = '';
 
 function submitForm(formId) {
   let formDom = document.querySelector('#' + formId)
@@ -33,7 +33,7 @@ function submitForm(formId) {
 
     let email = form.get('email')
     let password = form.get('password')
-    aux = email.split("@")[0]
+    aux = email
     
     data = {
       email : email,
@@ -490,17 +490,509 @@ function interestsUser(){
   })
 }
 
+//cargar la Lista de Chat
+function cargarListaChat(){
+  let token = getCookie("token")
+
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/myFollows"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    let follows = res.body.mails
+    let flen= follows.length
+
+    for (let f=0; f<flen ; f++){
+      var d = document.createElement("div");
+      d.className = "chat_list";
+      
+      var d2 = document.createElement("div");
+      d2.className= "chat_people";
+
+      var di = document.createElement("div");
+      d2.className= "chat_img";
+
+      var i = document.createElement("img")
+      i.src= "Images/No-Profile.png";
+      i.alt = 'sunil';
+
+      var dc = document.createElement("div");
+      dc.className = "chat_ib";
+
+      var a = document.createElement("a");
+      var correoDest= 'destinatacioMsg("'+ follows[f] + '")';
+      a.setAttribute('onclick',correoDest);
+
+      var h = document.createElement("h5")
+      var name = document.createTextNode(follows[f])
+      
+      h.appendChild(name);
+      a.appendChild(h)
+      dc.appendChild(a);
+      di.appendChild(i);
+      d2.appendChild(di);
+      d2.appendChild(dc)
+      d.appendChild(d2);
+
+      document.querySelector('#inbox-chat').appendChild(d);
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+//FIN cargar la Lista de Chat
+
+function destinatacioMsg(user){
+  console.log("Cambiar destinatario: "+user);
+  let formDom = document.querySelector('#bar-msg')
+  formDom.action = 'javascript:enviarMsg("'+ user + '")';
+  var node = document.querySelector('#historial-msg')
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}
+
+//Mensages de CHAT
+function enviarMsg(user){
+  console.log("Envio mensaje a: " , user)
+  let token = getCookie("token")
+  var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
+
+  // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
+  socket.emit('new-message',
+      {
+          token: token,
+          to: user,
+          message: document.querySelector('#bar-mensaje').value
+      });
+
+  //añadimos mensaje enviado
+  var d = document.createElement("div");
+  d.className = "outgoing_msg";
+  
+  var d2 = document.createElement("div");
+  d2.className= "sent_msg";
+
+  var p = document.createElement("p");
+  
+  var m = document.createTextNode(document.querySelector('#bar-mensaje').value);
+
+  var s = document.createElement("span");
+  s.className = "time_date"
+  var fecha = document.createTextNode("ahora")
+
+  var pin = document.createTextNode("Pin");
+
+  p.appendChild(m);
+  s.appendChild(fecha);
+  d2.appendChild(p);
+  d2.appendChild(s);
+  d.appendChild(d2);
+
+  document.querySelector('#historial-msg').appendChild(d);
+  
+  document.querySelector('#bar-mensaje').value = "";
+}
+//End Mensages de CHAT
 
 
+function prueba(){
+
+    let follows = ["Usuario1--","Usuario2--"]//res.body.mails
+    let flen= follows.length
+
+    for (let f=0; f<flen ; f++){
+      var d = document.createElement("div");
+      d.className = "chat_list";
+        
+      var d2 = document.createElement("div");
+      d2.className= "chat_people";
+
+      var di = document.createElement("div");
+      di.className= "chat_img";
+
+      var i = document.createElement("img")
+      i.src= "Images/No-Profile.png";
+      i.alt = 'sunil';
+
+      var dc = document.createElement("div");
+      dc.className = "chat_ib";
+
+      var a = document.createElement("a");
+      var correoDest= 'destinatacioMsg("'+ follows[f] + '")';
+      a.setAttribute('onclick',correoDest);
+
+      var h = document.createElement("h5")
+      var name = document.createTextNode(follows[f])
+      
+      h.appendChild(name);
+      a.appendChild(h)
+      dc.appendChild(a);
+      di.appendChild(i);
+      d2.appendChild(di);
+      d2.appendChild(dc)
+      d.appendChild(d2);
+
+      document.querySelector('#inbox-chat').appendChild(d);
+  } 
+}
+  
+function loadUserImages() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/images"
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)  
+  .then(res => {
+    let ids = res.body.msg
+    let idsLen= ids.length
+    for (let id=0; id<idsLen ; id++){
+      let source = basePath +"/image/"+ ids[id]
+      console.log("-",source)
+      
+      var img = document.createElement("img");
+      img.src= source;
+      img.className = "img-responsive";
+
+      var etiqueta = document.createElement("label");
+      etiqueta.className = "image-checkbox";
+
+      var check = document.createElement("input");
+      check.setAttribute("type", "checkbox");
+      check.name = "image[]";
+      check.value = ids[id];
+
+      var i = document.createElement("i");
+      i.className = "fa fa-check hidden";
+
+      etiqueta.appendChild(img);
+      etiqueta.appendChild(check);
+      etiqueta.appendChild(i);
+
+      var columna = '#modalCollectionCol' + ((id%4) +1)
+      document.querySelector(columna).appendChild(etiqueta);
+    }
+  }).catch(e => {
+    console.log("Adeuu")
+  });
+}
+
+function addCollection() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/addCollection"
+
+  let description = document.querySelector('#collection-description').value
+  let title = document.querySelector('#collection-name').value
+  var checkedList = document.querySelectorAll("input[name^='image[']:checked")
+  let imageIds = ""
+  let data = {}  
+
+  for (let i=0; i<checkedList.length - 1 ; i++){
+    imageIds += checkedList[i].value + " "
+  }
+  imageIds += checkedList[checkedList.length-1].value
 
 
+  data = {
+    name : title,
+    images : imageIds,
+    description : description,
+    token : token
+  }
 
+  superagent
+  .post(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .send(data)
+  .then(function(res) {
+    $('#modalCollection').modal('hide');
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
 
+function loadCollections() {
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadCollections"
 
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .then(function(res) {
+    for (let c=0; c<res.body.length; c++){
 
+      //Nombre collection
+      var etiqueta = document.createElement("label");
+      var i = document.createElement("i");
+      i.textContent = res.body[c].name;
+      etiqueta.appendChild(i);      
 
+      //Imagen Collection
+      let source = basePath +"/image/"+ res.body[c].images[0]
+      var img = document.createElement("img");
+      img.src= source;
+      img.className = "img-responsive";
+      img.setAttribute('data-toggle', 'modal');
+      img.setAttribute('data-target', '#showCollection');
+      img.setAttribute('onclick', 'javascript:showCollection(' + c + ')');
+      etiqueta.appendChild(img);
+      
+      //añadir a la capa correspondiente
+      var columna = '#collectionCol' + ((c%4) +1)
+      document.querySelector(columna).appendChild(etiqueta);
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
 
+function showCollection(indice){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadCollections"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .then(function(res) {
+      document.querySelector('#showCollectionTitle').textContent = res.body[indice].name
+      document.querySelector('#showCollectionDesc').textContent = res.body[indice].description
+      for (let c=0; c<res.body[indice].images.length; c++){
+        let source = basePath +"/image/"+ res.body[indice].images[c]
+        var img = document.createElement("img");
+        img.src= source;
+        img.className = "img-responsive";        
+        var columna = '#showCollectionCol' + ((c%4) +1)
+        document.querySelector(columna).innerHTML = img.outerHTML
+      
+      }      
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
 
+/* 
+Inici funció getAllUsers() --> Aquesta funció es crida des de l'HTML per tal de carregar els usuaris ja registrats.
+Es fa una consulta per tal de saber tots els usuaris disponibles, es comprova si ja es segueixen o no i en funció 
+d'aixó apareixerà un botó de follow o unfollow, així com mostrar el nom de cada usuari i la seva foto de perfil.
+*/
+function getAllUsers(){
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/all"
+  let actualUser = getCookie("username")
+  let following = myFollows();
+  console.log("ESTIC SEGUINT: ", following);
+  console.log("ESTIC SEGUINT[0]: ", following.indexOf(0));
+
+  
+  superagent
+  .get(basePath + target)
+  .set('Content-Type', encType)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let get = res.body.users
+    console.log('GET', get[0].email)
+    var nom = "";
+    var email = ""
+    for(let i = 0; i <get.length; i++){
+      nom = get[i]["email"];
+      email = get[i]["email"];
+      nom = nom.split("@")
+      nom = nom[0];
+
+      if (nom != actualUser){
+
+        var label = document.createElement("label");
+        label.id = nom;
+        label.className = nom;
+        label.textContent = nom;
+        label.style.marginLeft = "10px"
+        console.log("NOM: ", nom);
+        console.log("includes??: ", following.includes(nom));
+        console.log("ESTAT ACTUAL DE FOLLOWING ", following);
+
+        var photo = document.createElement("img");
+        photo.id = "photo"+nom;
+        photo.src = "Images/No-Profile.png"
+        photo.length = "70"
+        photo.width = "70"
+        photo.style.marginLeft = "20px"
+
+        label.append(photo);
+
+        getProfileImage(email, nom)
+
+        if (following.includes(nom)){
+          var btn = document.createElement("BUTTON");
+          btn.id = nom
+          btn.textContent = "Unfollow";  
+          btn.style.height = "25px";
+          btn.style.width = "70px"
+          btn.style.color = "white"
+          btn.style.backgroundColor = "#ef5a4a"
+          
+          btn.addEventListener("click", unfollowUser);
+          btn.param = nom;
+        }else{
+          var btn = document.createElement("BUTTON");
+          btn.id = nom
+          btn.textContent = "Follow";  
+          btn.style.height = "25px";
+          btn.style.width = "70px"
+          btn.style.backgroundColor = "#4286f4"
+          btn.style.color = "white"
+          
+          btn.addEventListener("click", followUser);
+          btn.param = nom;
+        }
+        
+        let space = document.createElement("br");
+  
+        label.innerHTML += '  ';
+        label.appendChild(btn);
+        
+        //document.querySelector("#label").append(photo);
+        document.querySelector("#people").append(btn);
+        document.querySelector("#people").append(label);
+        document.querySelector("#people").append(space);
+      }
+
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} // Fi funció getAllUsers()
+
+// Inici funció followUser() --> funció cridada al apretar el botó follow per tal de seguir un usuari.
+function followUser(evt){
+  let encType = "application/x-www-form-urlencoded" 
+  let username = evt.target.param;
+  let target = "/user/follow/" + username;
+  let token = getCookie("token");
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    console.log("USUARI SEGUIT : ", username)
+    var btn = document.getElementById(username);
+    btn.style.backgroundColor = "#ed4921"
+    btn.textContent = "Unfollow"
+    btn.style.color = "white"
+    btn.addEventListener("click", unfollowUser);
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} // Fi funció followUser()
+
+// Inici funció unfollowUser() --> funció cridada al apretar el botó unfollow per tal de deixar de seguir un usuari.
+function unfollowUser(evt){
+  let encType = "application/x-www-form-urlencoded" 
+  let username = evt.target.param;
+  let target = "/user/unfollow/" + username;
+  let token = getCookie("token");
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    console.log("USUARI DEIXAT DE SEGUIR: ", username)
+    var btn = document.getElementById(username);
+    btn.style.backgroundColor = "#4286f4"
+    btn.textContent = "Follow"
+    btn.addEventListener("click", followUser);
+
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} // Fi funció unfollowUser()
+
+// Inici funció myFollows() --> retorna un array amb els noms de tots els usuaris als qui segueix l'usuari loguejat actualment.
+function myFollows(){
+  let token = getCookie("token")
+  console.log("TOKEN ACTUAL!", token)
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/myFollows";
+  let follows = []
+
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', )
+  .then(function(res) {
+    console.log("CORRECTE", JSON.stringify(res.body))
+    var mails = res.body;
+    var nom = "";
+    for (let i = 0; i < mails["mails"].length; i++){
+      nom = mails["mails"][i];
+      nom = nom.split("@");
+      nom = nom[0]
+      follows.push(nom)
+    }    
+    console.log("DES DE SUPERAGENT")
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+  console.log("DES DE RETURN")
+  return follows;
+} // Fi funció myFollows()
+
+// Inici funció getProfileImage() --> entrat un email, retorna la foto de perfil de l'usuari amb l'email corresponent.
+function getProfileImage(email, nom){
+  let mail = email
+  let name =  nom
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profImg/"+mail;
+  var fotoID = "";
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log("FOTO", JSON.stringify(res.body))
+    let foto = res.body;
+    fotoID = foto["profile_img"];
+    var photo = document.createElement("img");
+
+    if (fotoID.length == 0){
+      photo.src = "Images/No-Profile.png";
+      document.querySelector("#photo"+name).src = photo.src;
+    }else{
+      let source = basePath+"/image/"+fotoID
+      photo.src = source;
+      document.querySelector("#photo"+name).src = photo.src
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} // Fi funció getProfileImage()
 
 //Get Timeline
 function getImageTimeLine(){
