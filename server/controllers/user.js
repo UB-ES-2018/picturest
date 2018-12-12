@@ -1,6 +1,7 @@
 var User = require('../models/user')
 var Image = require('../models/image')
 var Collection = require('../models/collection')
+var CollectionController = require('./collection')
 var jwt = require('jsonwebtoken')
 
 // registers new user
@@ -654,6 +655,127 @@ exports.unfollow = function(req, res) {
     })
 }
 
+exports.timelineInfo = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+
+    /**
+     * @description determine if an array contains one or more items from another array.
+     * @param {array} haystack the array to search.
+     * @param {array} arr the array providing items to check for in the haystack.
+     * @return {boolean} true|false if haystack contains at least one item from arr.
+     */
+    var match = function (haystack, arr) {
+        return arr.some(function (v) {
+            return haystack.indexOf(v) >= 0;
+        })
+    }
+
+    User.findOne({email: email}).then((user,err) => {
+        if (user) {
+
+            let images_follow = []
+            let follow_emails = []
+            let _interests = user.interests;
+            let _collections = []
+
+            // Get images of collections that I follow
+            user.collections.forEach((coll, err) => {
+                if (coll) {
+                    let images = CollectionController.getCollectionImages(coll);
+                    images.forEach((imgID) => {
+                        if (!_collections.includes(imgID)) {
+                            _collections.push(imgID)
+                        }
+                    })
+                }
+            })
+
+            images_follow.concat(_collections);
+
+
+            // get following emails
+            user.follow.forEach((uname) => {
+                User.findOne({username: uname}).then((eml, er) => {
+                    if (eml) {
+                        follow_emails.push(eml.email)
+                    }
+                })
+            })
+
+            setTimeout(function () {
+                // Get images
+                Image.find({}).then((images, errorImages) => {
+                    if (images) {
+                        images.forEach((imag) => {
+                            // Filter images by following
+                            if (follow_emails.includes(imag.user) & !images_follow.includes(imag._id)) {
+                                images_follow.push(imag._id)
+                            }
+                            // Filter images by user interest
+                            if (match(imag.tag, _interests) & !images_follow.includes(imag._id)) {
+                                images_follow.push(imag._id)
+                            }
+
+                        })
+                        res.json({
+                            success: true,
+                            imgs: images_follow
+                        })
+                    }
+                    if (errorImages) {
+                        res.json({
+                            success: false,
+                            msg: "Error in Image.Find()"
+                        })
+                    }
+                    else {
+                        res.json({
+                            success: true,
+                            imgs: images_follow
+                        })
+                    }
+                })
+            }, 2000);
+        }
+    })
+}
+
+/*
+ * Example: http://localhost:3000/user/profImg/jordi@jordi.io
+ */
+exports.getUserProfImg = function(req, res) {
+    let email = req.params.email
+
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            res.json({
+                success: true,
+                profile_img: user.profile_img
+            })
+
+        }
+        if (err) {
+            res.json({
+                success: false,
+                msg: "Error finding user"
+            })
+        }
+    }).catch(() => {
+        res.json({
+            success: false,
+            msg: "Unexpected error",
+            error: "User not found"
+            })
+    }).catch((err) => {
+        res.json({
+            success: false,
+            error: "Unexpected error on server, user cannot be find"
+        })
+    })
+}
+          
 exports.getMyFollows = function(req, res) {
     let token = req.body.token || req.headers['x-access-token'] || req.query.token
     let decodedToken = jwt.decode(token)
@@ -692,33 +814,6 @@ exports.getMyFollows = function(req, res) {
     })
 }
 
-/*
- * Example: http://localhost:3000/user/profImg/jordi@jordi.io
- */
-exports.getUserProfImg = function(req, res) {
-    let email = req.params.email
-
-    User.findOne({email: email}).then((user, err) => {
-        if (user) {
-            res.json({
-                success: true,
-                profile_img: user.profile_img
-            })
-        }
-        if (err) {
-            res.json({
-                success: false,
-                error: "User not found"
-            })
-        }
-    }).catch((err) => {
-        res.json({
-            success: false,
-            error: "Unexpected error on server, user cannot be find"
-        })
-    })
-}
-
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {
@@ -745,4 +840,3 @@ exports.middleware = function (app) {
         }
     })
 }
-
