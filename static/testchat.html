@@ -11,9 +11,9 @@
 
     // CAMBIAR EL USUARIO Y TOKEN PARA TESTEAR
     const user = 'eddy@eddy.com';
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGY4ZGE2NGM4MGZmNTRjZWI1ZWU2YSIsImVtYWlsIjoiZWphaXJvQGVqYWlyby5jb20iLCJpYXQiOjE1NDQ1MjMyMjIsImV4cCI6MTU0NDYwOTYyMn0.egfWg9eVU2BA9vAecawVK3P-DZpEhM5r09oEmsI-fWI';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGZjMDc0NTQxYTQ2NGViNjhiZDE2YiIsImVtYWlsIjoiZWphaXJvQGVqYWlyby5jb20iLCJpYXQiOjE1NDQ1MzYxODYsImV4cCI6MTU0NDYyMjU4Nn0.FyHsvX-2dlL7cfSb4CqKpFjqTuPmw6SpAVrA4o1Byao';
     // --------------------------------------------
-
+    console.log(token)
     var socket = io.connect('http://localhost:8080', { forceNew: true });
 
     // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
@@ -23,15 +23,15 @@
             to: user,
             message: 'Hola qué tal?'
         });
-
+    
     // Chequear mensajes pendientes
-    socket.emit('pending-message',
+    /*socket.emit('pending-message',
         {
             token: token
         });
-    
+    */
     // Comprobar siempre si hay algún mensaje para mi
-    socket.on(user, function (data) {
+    socket.on("ejairo@ejairo", function (data) {
         console.log(data);
     });
 </script>

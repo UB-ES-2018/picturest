@@ -1,7 +1,7 @@
 'use strict'
 
 const basePath = 'http://localhost:3000';
-const user = 'eddy@eddy.com';
+const user = 'ejairo@ejairo.com';
 let token = '';
 let aux = '';
 
@@ -515,20 +515,25 @@ function cargarListaChat(){
       i.src= "Images/No-Profile.png";
       i.alt = 'sunil';
 
-      var dc = document.createElement("div")
+      var dc = document.createElement("div");
       dc.className = "chat_ib";
+
+      var a = document.createElement("a");
+      var correoDest= 'destinatacioMsg("'+ follows[f] + '")';
+      a.setAttribute('onclick',correoDest);
 
       var h = document.createElement("h5")
       var name = document.createTextNode(follows[f])
       
       h.appendChild(name);
-      dc.appendChild(h);
+      a.appendChild(h)
+      dc.appendChild(a);
       di.appendChild(i);
       d2.appendChild(di);
       d2.appendChild(dc)
       d.appendChild(d2);
 
-      document.querySelector('#inbox-chat').appendChild(i);
+      document.querySelector('#inbox-chat').appendChild(d);
     }
   })
   .catch(function(e) {
@@ -537,10 +542,20 @@ function cargarListaChat(){
 }
 //FIN cargar la Lista de Chat
 
+function destinatacioMsg(user){
+  console.log("Cambiar destinatario: "+user);
+  let formDom = document.querySelector('#bar-msg')
+  formDom.action = 'javascript:enviarMsg("'+ user + '")';
+  var node = document.querySelector('#historial-msg')
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}
 
 //Mensages de CHAT
-function enviarMsg(){
+function enviarMsg(user){
   let token = getCookie("token")
+  console.log(token)
   var socket = io.connect('http://localhost:8080', { forceNew: true });
   // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
   socket.emit('new-message',
@@ -576,14 +591,14 @@ function enviarMsg(){
   document.querySelector('#historial-msg').appendChild(d);
   
   // Chequear mensajes pendientes
-  socket.emit('pending-message',
+  /*socket.emit('pending-message',
       {
           token: token
-      });
+      });*/
   
   
   // Comprobar siempre si hay algún mensaje para mi
-  socket.on(user, function (data) {
+  socket.on("eddy@eddy.com", function (data) {
       console.log(data);
 
       //añadir mensaje recidos
@@ -619,3 +634,45 @@ function enviarMsg(){
   document.querySelector('#bar-mensaje').value = "";
 }
 //End Mensages de CHAT
+
+
+function prueba(){
+
+    let follows = ["Usuario1--","Usuario2--"]//res.body.mails
+    let flen= follows.length
+
+    for (let f=0; f<flen ; f++){
+      var d = document.createElement("div");
+      d.className = "chat_list";
+        
+      var d2 = document.createElement("div");
+      d2.className= "chat_people";
+
+      var di = document.createElement("div");
+      di.className= "chat_img";
+
+      var i = document.createElement("img")
+      i.src= "Images/No-Profile.png";
+      i.alt = 'sunil';
+
+      var dc = document.createElement("div");
+      dc.className = "chat_ib";
+
+      var a = document.createElement("a");
+      var correoDest= 'destinatacioMsg("'+ follows[f] + '")';
+      a.setAttribute('onclick',correoDest);
+
+      var h = document.createElement("h5")
+      var name = document.createTextNode(follows[f])
+      
+      h.appendChild(name);
+      a.appendChild(h)
+      dc.appendChild(a);
+      di.appendChild(i);
+      d2.appendChild(di);
+      d2.appendChild(dc)
+      d.appendChild(d2);
+
+      document.querySelector('#inbox-chat').appendChild(d);
+  } 
+}

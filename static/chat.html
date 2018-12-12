@@ -13,7 +13,7 @@
   <link href="css/chat.css" rel="stylesheet">
 </head>
 
-  <body>
+  <body onload="prueba()">
     <!-- Navigator bar-->
     <nav class="navbar navbar-default" role="navigation"><!--data-spy="affix" para que siga el scroll-->
       <!-- Brand and toggle get grouped for better mobile display -->
@@ -98,13 +98,15 @@
             <div class="chat_list active_chat">
               <div class="chat_people">
                 
-                <div class="chat_img"> 
+                <!--<div class="chat_img"> 
                   <img src="Images/No-Profile.png" alt="sunil"> 
-                </div>
+                </div>-->
 
                 <div class="chat_ib">
-                  <h5>User 1<!--<span class="chat_date">Date</span>--></h5>
-                  <!--<p>Last message received</p>-->
+                  <a href="javascript:destinatacioMsg()">
+                    <h5>User 1<!--<span class="chat_date">Date</span>--></h5>
+                    <!--<p>Last message received</p>-->
+                  </a>
                 </div>
               </div>
             </div>
@@ -133,7 +135,7 @@
             
             <div class="input_msg_write">
 
-              <form id="bar-msg" x-target="" x-method="" action="javascript:enviarMsg()" x-enctype="">
+              <form id="bar-msg" x-target="" x-method="" action="javascript:enviarMsg(user)" x-enctype="">
                 <div class="input-group">
                   <input id=bar-mensaje type="text" class="write_msg form-control" autocomplete="off" placeholder="Type a message" size=100 />
                   <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
