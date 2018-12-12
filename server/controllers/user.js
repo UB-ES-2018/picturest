@@ -3,7 +3,6 @@ var Image = require('../models/image')
 var Collection = require('../models/collection')
 var jwt = require('jsonwebtoken')
 
-
 // registers new user
 exports.signup = function (req, res) {
     // get body
@@ -499,6 +498,7 @@ exports.getAll = function (req, res) {
         }
     })
 }
+
 exports.getImages = function(req, res) {
     let token = req.body.token || req.headers['x-access-token'] || req.query.token
     let decodedToken = jwt.decode(token)
@@ -745,4 +745,4 @@ exports.middleware = function (app) {
         }
     })
 }
-  
+
