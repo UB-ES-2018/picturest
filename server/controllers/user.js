@@ -477,6 +477,69 @@ exports.getProfileDesc = function(req, res) {
     })
 }
 
+exports.getImages = function(req, res) {
+    let token = req.body.token || req.headers['x-access-token'] || req.query.token
+    let decodedToken = jwt.decode(token)
+    let email = decodedToken.email
+    
+    User.findOne({email: email}).then((user, err) => {
+        if (user) {
+            let final = []
+            // Owned images
+            Image.find({user: email}).then((images, err) => {
+                if (images) {
+                    images.forEach(function(img) {
+                        if (!final.includes(img._id.toString())) {
+                            final.push(img._id.toString())
+                        }
+                    })
+                    console.log("Owned: " + final)
+                    // Pinned images 
+                    user.pins.forEach((img) => {
+                        if (!final.includes(img.toString())) {
+                            final.push(img.toString())
+                        }
+                    })
+                    console.log("Owned + Pinned: " + final)
+                    // images for interest
+                    let interest = user.interests;
+                    Image.find({}).then((images, err) => {
+                        if (images) {
+                            interest.forEach((tag) => {
+                                images.forEach(function(imge) {
+                                    if (!final.includes(imge._id.toString()) && imge.tag.toString().includes(tag).toString()) {
+                                        final.push(imge._id.toString())
+                                    }
+                                })
+                            })
+                            console.log("Owned + Pinned + Interests: " + final)
+                            res.json({
+                                success: true,
+                                msg: final
+                            })
+                        }
+                        if (err) {}
+                    })
+                }
+                if (err) {
+                    res.json({
+                        success: false,
+                        msg: "Failed in owned images"
+                    })
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+        if (err) {
+            res.json({
+                success: false,
+                error: "User not found"
+            })
+        }
+    })
+}
+
 exports.middleware = function (app) {
     // route middleware to verify a token
     app.use(function (req, res, next) {
