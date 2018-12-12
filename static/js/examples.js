@@ -556,7 +556,7 @@ function addCollection() {
   .set('Content-Type', encType)
   .send(data)
   .then(function(res) {
-    alert("Vamos Bien")
+    $('#modalCollection').modal('hide');
   })
   .catch(function(e) {
     console.error(e)
@@ -579,23 +579,49 @@ function loadCollections() {
       var etiqueta = document.createElement("label");
       var i = document.createElement("i");
       i.textContent = res.body[c].name;
-      etiqueta.appendChild(i);
-
-      
+      etiqueta.appendChild(i);      
 
       //Imagen Collection
       let source = basePath +"/image/"+ res.body[c].images[0]
       var img = document.createElement("img");
       img.src= source;
       img.className = "img-responsive";
+      img.setAttribute('data-toggle', 'modal');
+      img.setAttribute('data-target', '#showCollection');
+      img.setAttribute('onclick', 'javascript:showCollection(' + c + ')');
       etiqueta.appendChild(img);
       
-
+      //añadir a la capa correspondiente
       var columna = '#collectionCol' + ((c%4) +1)
       document.querySelector(columna).appendChild(etiqueta);
-
-
     }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+
+function showCollection(indice){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/downloadCollections"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  .then(function(res) {
+      document.querySelector('#showCollectionTitle').textContent = res.body[indice].name
+      document.querySelector('#showCollectionDesc').textContent = res.body[indice].description
+      for (let c=0; c<res.body[indice].images.length; c++){
+        let source = basePath +"/image/"+ res.body[indice].images[c]
+        var img = document.createElement("img");
+        img.src= source;
+        img.className = "img-responsive";        
+        var columna = '#showCollectionCol' + ((c%4) +1)
+        document.querySelector(columna).innerHTML = img.outerHTML
+      
+      }      
   })
   .catch(function(e) {
     console.error(e)
