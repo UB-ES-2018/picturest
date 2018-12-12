@@ -4,9 +4,7 @@ let express = require('express')
 let bodyParser = require('body-parser')
 let cors = require('cors')
 
-var app = express(),
-    server = require('http').Server(app),
-    io = require('socket.io')(server);
+var app = express()
 
 var mongoose = require('mongoose')
 
@@ -39,9 +37,7 @@ mongoose.connect(process.env.DB_HOST).then((db) => {
       res.setHeader('Last-Modified', (new Date()).toUTCString())
       next()
     })
-
-    // Change for integrating socket.io
-    server.listen(process.env.PORT, function () {
+    server = app.listen(process.env.PORT, function () {
       console.log('Server and listening on port ' + process.env.PORT)
     })
 }).catch(err => { // mongoose connection error will be handled here
@@ -70,7 +66,4 @@ function useCors (app) {
 }
 
 // For testing purposes
-module.exports = {
-    app,
-    io
-}
+module.exports = app
