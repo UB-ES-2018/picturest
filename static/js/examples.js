@@ -62,6 +62,13 @@ function submitForm(formId) {
       document.cookie = setCookie('username',aux,1);
       window.location = "Perfil.html"
     }
+
+    if(formId=='signup' && res.body.token){
+    	document.cookie = setCookie('token',token,1);
+      	document.cookie = setCookie('username',aux,1);
+      	alert("ya estas registrado")
+      	window.location = "Perfil.html"
+    }
     //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
     console.log(JSON.stringify(res.body))
     
