@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Chat</title>
+</head>
+<body>
+<h1>Test</h1>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    // CAMBIAR EL USUARIO Y TOKEN PARA TESTEAR
+    const user = 'ejairo@ejairo.com';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMGZjMDc0NTQxYTQ2NGViNjhiZDE2YiIsImVtYWlsIjoiZWphaXJvQGVqYWlyby5jb20iLCJpYXQiOjE1NDQ1ODYzNDMsImV4cCI6MTU0NDY3Mjc0M30.6hfxTSDve0u4Ue_sFFM6QkkOl3FeurBT-Mec1mozTNY';
+    // --------------------------------------------
+
+    var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
+
+    // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
+    socket.emit('new-message',
+        {
+            token: token,
+            to: 'eddy@eddy.com',
+            message: 'Hola soy JAIRO'
+        });
+
+    // Chequear mensajes pendientes
+    socket.emit('pending-message',
+        {
+            token: token
+        });
+
+    // Comprobar siempre si hay algún mensaje para mi
+    socket.on(user, function (data) {
+        console.log(data);
+    });
+</script>
+</body>
+</html>
