@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html >
     <style>
     
     * {
@@ -181,13 +181,31 @@ transform:translatey(0);
 textarea {
   resize: none;
 }
+
+#followBtn {
+    background-color: #f5461b;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    width: 250px;
+    height: 40px;
+    position: absolute;
+    top: 20%;
+    left: 8%;
+}
+
+#people {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+}
+
+
 </style>
     
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="" content="width=device-width, initial-scale=1">
-        <title>Perfil Picturest</title>
+        <title>Following Picturest</title>
         <!-- CSS de Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- Latest compiled and minified JavaScript -->
@@ -198,7 +216,7 @@ textarea {
         
     </head>
 
-    <body onload="getProfileData()">
+    <body>
 
         
         <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -254,8 +272,8 @@ textarea {
             </form>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="http://localhost:3000/static/Perfil.html">Home</a></li>
-          <li><a href="http://localhost:3000/static/Following.html">Following</a></li>
+          <li><a href="http://localhost:3000/static/Perfil.html">Home</a></li>
+          <li class="active"><a href="http://localhost:3000/static/Following.html">Following</a></li>
           <li><a href="http://localhost:3000/static/profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><b class="caret"></b></a>
@@ -290,15 +308,12 @@ textarea {
       </div><!-- /.navbar-collapse -->
     </nav>
 
-    <div>
-      <h1 style="margin-left:20px;">Picture User</h1>
-      <div id="profile-container" >
-        <image id="profileImage" src="Images/No-Profile.png" />
-      </div>
-      <div>
-        <textarea rows="4" cols="50" id="profileDesc" readonly></textarea>
-      </div>
-    </div>
+    <button id="followBtn" type="button" >People to follow</button>
+    <br> </br>
+
+    <ul id="people">
+
+    </ul> 
 
     <div class="contenedor">
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
@@ -310,8 +325,19 @@ textarea {
     </body>
 </html>
 
-<script>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script>    
+    var activat = true;
+    var btn_follow = document.getElementById("followBtn");
+    btn_follow.style.color = 'white';
+    btn_follow.onclick = function(){
+        getAllUsers();
+        btn_follow.disabled = "true"
+
+    }
+
     $('.botonF1').click(function(){
         $('.btn').addClass('animacionVer');
     })
+
 </script>

@@ -985,5 +985,4 @@ function getProfileImage(email, nom){
   .catch(function(e) {
     console.error(e)
   })
-
 } // Fi funció getProfileImage()
