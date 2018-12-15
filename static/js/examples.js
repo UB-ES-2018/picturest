@@ -53,6 +53,7 @@ function submitForm(formId) {
   .set('Accept', 'application/json')
   .send(data)
   .then(function(res) {
+    console.log(res.body.success)
     if (res.body.token) {
       token = res.body.token
     }
@@ -61,6 +62,9 @@ function submitForm(formId) {
       document.cookie = setCookie('token',token,1);
       document.cookie = setCookie('username',aux,1);
       window.location = "Perfil.html"
+    }
+    if(formId=='signup' && res.body.success){
+      window.location = "signin.html"
     }
     //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
     console.log(JSON.stringify(res.body))
@@ -627,3 +631,221 @@ function showCollection(indice){
     console.error(e)
   })
 }
+
+/* 
+Inici funció getAllUsers() --> Aquesta funció es crida des de l'HTML per tal de carregar els usuaris ja registrats.
+Es fa una consulta per tal de saber tots els usuaris disponibles, es comprova si ja es segueixen o no i en funció 
+d'aixó apareixerà un botó de follow o unfollow, així com mostrar el nom de cada usuari i la seva foto de perfil.
+*/
+function getAllUsers(){
+  //let following = myFollows();
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  let token = getCookie("token")
+  console.log("TOKEN ACTUAL!", token)
+  let encType = "application/x-www-form-urlencoded" 
+  let target1 = "/user/myFollows";
+  let follows = []
+  var resposta = false;
+  console.log("HOLAAA1f432423")
+
+  superagent
+  .get(basePath + target1)
+  .set('x-access-token', token)
+  .set('Content-Type', encType )
+  .then(function(res) {
+
+      console.log("CORRECTE_myfollows", JSON.stringify(res.body))
+      var mails = res.body;
+      var nom = "";
+      for (let i = 0; i < mails["mails"].length; i++){
+        nom = mails["mails"][i];
+        nom = nom.split("@");
+        nom = nom[0]
+        follows.push(nom)
+      }
+    resposta = true;
+    setUsersToFollow(follows); 
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+  setTimeout(myFunction, 500)
+  function myFunction(){
+    if (resposta == false){
+      console.log("SAALTA EL TIMER!!")
+      let follows = []
+      setUsersToFollow(follows); 
+    }
+  }
+}
+
+function setUsersToFollow(follows){
+  let target = "/user/all";
+  let actualUser = getCookie("username");
+  let following = follows;
+  let encType = "application/x-www-form-urlencoded" 
+
+  console.log("ESTIC SEGUINT: ", following);
+  
+  superagent
+  .get(basePath + target)
+  .set('Content-Type', encType)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    let get = res.body.users
+    console.log('GET', get[0].email)
+    var nom = "";
+    var email = ""
+    for(let i = 0; i <get.length; i++){
+      nom = get[i]["email"];
+      email = get[i]["email"];
+      nom = nom.split("@")
+      nom = nom[0];
+
+      if (nom != actualUser){
+
+        var label = document.createElement("label");
+        label.id = nom;
+        label.className = nom;
+        label.textContent = nom;
+        label.style.marginLeft = "10px"
+
+        var photo = document.createElement("img");
+        photo.id = "photo"+nom;
+        photo.src = "Images/No-Profile.png"
+        photo.length = "70"
+        photo.width = "70"
+        photo.style.marginLeft = "20px"
+
+        label.append(photo);
+
+        getProfileImage(email, nom)
+
+        if (following.includes(nom)){
+          var btn = document.createElement("BUTTON");
+          btn.id = nom
+          btn.textContent = "Unfollow";  
+          btn.style.height = "25px";
+          btn.style.width = "70px"
+          btn.style.color = "white"
+          btn.style.backgroundColor = "#ef5a4a"
+          
+          btn.addEventListener("click", unfollowUser);
+          btn.param = nom;
+        }else{
+          var btn = document.createElement("BUTTON");
+          btn.id = nom
+          btn.textContent = "Follow";  
+          btn.style.height = "25px";
+          btn.style.width = "70px"
+          btn.style.backgroundColor = "#4286f4"
+          btn.style.color = "white"
+          
+          btn.addEventListener("click", followUser);
+          btn.param = nom;
+        }
+        
+        let space = document.createElement("br");
+  
+        label.innerHTML += '  ';
+        label.appendChild(btn);
+        
+        //document.querySelector("#label").append(photo);
+        document.querySelector("#people").append(btn);
+        document.querySelector("#people").append(label);
+        document.querySelector("#people").append(space);
+      }
+
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} 
+
+
+// Fi funció getAllUsers()
+
+// Inici funció followUser() --> funció cridada al apretar el botó follow per tal de seguir un usuari.
+function followUser(evt){
+  let encType = "application/x-www-form-urlencoded" 
+  let username = evt.target.param;
+  let target = "/user/follow/" + username;
+  let token = getCookie("token");
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    console.log("USUARI SEGUIT : ", username)
+    var btn = document.getElementById(username);
+    btn.style.backgroundColor = "#ed4921"
+    btn.textContent = "Unfollow"
+    btn.style.color = "white"
+    btn.addEventListener("click", unfollowUser);
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} // Fi funció followUser()
+
+// Inici funció unfollowUser() --> funció cridada al apretar el botó unfollow per tal de deixar de seguir un usuari.
+function unfollowUser(evt){
+  let encType = "application/x-www-form-urlencoded" 
+  let username = evt.target.param;
+  let target = "/user/unfollow/" + username;
+  let token = getCookie("token");
+
+  superagent
+  .put(basePath + target)
+  .set('Content-Type', encType)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log(JSON.stringify(res.body))
+    console.log("USUARI DEIXAT DE SEGUIR: ", username)
+    var btn = document.getElementById(username);
+    btn.style.backgroundColor = "#4286f4"
+    btn.textContent = "Follow"
+    btn.addEventListener("click", followUser);
+
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+} // Fi funció unfollowUser()
+
+
+// Inici funció getProfileImage() --> entrat un email, retorna la foto de perfil de l'usuari amb l'email corresponent.
+function getProfileImage(email, nom){
+  let mail = email
+  let name =  nom
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/profImg/"+mail;
+  var fotoID = "";
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .then(function(res) {
+    console.log("FOTO", JSON.stringify(res.body))
+    let foto = res.body;
+    fotoID = foto["profile_img"];
+    var photo = document.createElement("img");
+
+    if (fotoID.length == 0){
+      photo.src = "Images/No-Profile.png";
+      document.querySelector("#photo"+name).src = photo.src;
+    }else{
+      let source = basePath+"/image/"+fotoID
+      photo.src = source;
+      document.querySelector("#photo"+name).src = photo.src
+    }
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+
+} // Fi funció getProfileImage()
