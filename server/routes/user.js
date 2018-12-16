@@ -1,6 +1,7 @@
 
 module.exports = function (app) {
     var user = require('../controllers/user')
+    var chat = require('../controllers/chat')
 
     app.post('/login', user.login)
     app.post('/signup', user.signup)

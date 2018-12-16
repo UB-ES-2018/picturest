@@ -33,7 +33,7 @@ function submitForm(formId) {
 
     let email = form.get('email')
     let password = form.get('password')
-    aux = email.split("@")[0]
+    aux = email
     
     data = {
       email : email,
@@ -94,11 +94,6 @@ function upload() {
     getTag(res.body.imageId, text)//Añadido
 
     document.querySelector('#upload-demo').setAttribute('src', source)
-    //document.querySelector('#upload-log').value = res.body.url
-    var i = document.createElement("img")
-    i.src= source;
-    i.style.cssText = 'width:100%'
-    document.querySelector('#columnaimagen').appendChild(i);
 
   })
 }
@@ -176,6 +171,13 @@ function getImageByTag(){
     let imgs = res.body.images
     console.log(imgs)
     let ilen= imgs.length
+    
+    
+    for (let b=1; b<=4;b++){
+      var gridImg = '#columnaimagen' + b;
+
+      $(gridImg).empty()
+    }
 
     for (let l=0; l<ilen ; l++){
       let source = basePath +"/image/"+ imgs[l]
@@ -208,7 +210,9 @@ function getImageByTag(){
       d.appendChild(i);
       d.appendChild(d2);
 
+
       var columna = '#columnaimagen' + ((l%4) +1)
+      console.log(columna)
       document.querySelector(columna).appendChild(d);
       //document.querySelector('#columnaimagen').appendChild(d);
     }
@@ -371,7 +375,9 @@ function getImgPin(){
       i.src= source;
       i.style.cssText = 'width:100%'
       
-      document.querySelector('#columnaimagen1').appendChild(i);
+      var columna = '#columnaimagen' + ((p%4) +1)
+      document.querySelector(columna).appendChild(i);
+      //document.querySelector('#columnaimagen1').appendChild(i);
     }
   })
   .catch(function(e) {
@@ -912,4 +918,125 @@ function getImageTimeLine(){
     console.error(e)
   })
 }
-//Fin Get Timenline 
+//Fin Get Timenline
+
+//CHAT
+
+//cargar la Lista de Chat
+function cargarListaChat(){
+  let token = getCookie("token")
+
+  let encType = "application/x-www-form-urlencoded" 
+  let target = "/user/myFollows"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    let follows = res.body.mails
+    let flen= follows.length
+
+    for (let f=0; f<flen ; f++){
+      var d = document.createElement("div");
+      d.className = "chat_list";
+        
+      var d2 = document.createElement("div");
+      d2.className= "chat_people";
+
+      var di = document.createElement("div");
+      di.className= "chat_img";
+
+      var i = document.createElement("img")
+      i.src= "Images/No-Profile.png";
+      i.alt = 'sunil';
+
+      var dc = document.createElement("div");
+      dc.className = "chat_ib";
+
+      var a = document.createElement("a");
+      var correoDest= 'destinatacioMsg("'+ follows[f] + '")';
+      a.setAttribute('onclick',correoDest);
+
+      var h = document.createElement("h5")
+      var name = document.createTextNode(follows[f])
+      
+      h.appendChild(name);
+      a.appendChild(h)
+      dc.appendChild(a);
+      di.appendChild(i);
+      d2.appendChild(di);
+      d2.appendChild(dc)
+      d.appendChild(d2);
+
+      document.querySelector('#inbox-chat').appendChild(d);
+  } 
+  })
+  .catch(function(e) {
+    console.error(e)
+  })
+}
+//FIN cargar la Lista de Chat
+
+function destinatacioMsg(user){
+  console.log("Cambiar destinatario: "+user);
+  let formDom = document.querySelector('#bar-msg')
+  formDom.action = 'javascript:enviarMsg("'+ user + '")';
+  var node = document.querySelector('#historial-msg')
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
+  }
+}
+
+//Mensages de CHAT
+function enviarMsg(user){
+  console.log("Envio mensaje a: " , user)
+  let token = getCookie("token")
+  var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
+
+  // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
+  socket.emit('new-message',
+      {
+          token: token,
+          to: user,
+          message: document.querySelector('#bar-mensaje').value
+      });
+
+  //añadimos mensaje enviado
+  var d = document.createElement("div");
+  d.className = "outgoing_msg";
+  
+  var d2 = document.createElement("div");
+  d2.className= "sent_msg";
+
+  var p = document.createElement("p");
+  
+  var m = document.createTextNode(document.querySelector('#bar-mensaje').value);
+
+  var s = document.createElement("span");
+  s.className = "time_date"
+  var fecha = document.createTextNode("ahora")
+
+  var pin = document.createTextNode("Pin");
+
+  p.appendChild(m);
+  s.appendChild(fecha);
+  d2.appendChild(p);
+  d2.appendChild(s);
+  d.appendChild(d2);
+
+  document.querySelector('#historial-msg').appendChild(d);
+  
+  document.querySelector('#bar-mensaje').value = "";
+}
+//End Mensages de CHAT
+
+
+function logOut(){
+  document.cookie = setCookie('token',"",-100);
+  document.cookie = setCookie('username',"",100);
+
+  window.location = "signin.html"
+}
