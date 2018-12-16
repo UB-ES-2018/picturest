@@ -84,7 +84,7 @@ function upload() {
   let text = document.querySelector('#image-description').value
 
   superagent
-  .post('http://localhost:3000/image')
+  .post(basePath + '/image')
   .set('x-access-token', token)
   .field('token', token)
   .attach('image', file, file.name)
@@ -110,7 +110,7 @@ function getTag(id, text){
   }
 
   superagent
-  .put('http://localhost:3000/image/tag')
+  .put(basePath + '/image/tag')
   .set('x-access-token', token)
   .set('Content-Type','application/x-www-form-urlencoded')
   .set('Accept', 'application/json')
@@ -228,7 +228,7 @@ function imgUser(){
   let token = getCookie("token")
   
   superagent
-  .post('http://localhost:3000/image')
+  .post(basePath + '/image')
   .set('x-access-token', token)
   .field('token', token)
   .attach('image', file, file.name)
@@ -994,7 +994,7 @@ function destinatacioMsg(user){
 function enviarMsg(user){
   console.log("Envio mensaje a: " , user)
   let token = getCookie("token")
-  var socket = io.connect('http://localhost:3000', {transports: ['websocket'], upgrade: false });
+  var socket = io.connect(basePath, {transports: ['websocket'], upgrade: false });
 
   // Enviar un nuevo mensaje, Ejemplo de mensaje a mí mismo
   socket.emit('new-message',
