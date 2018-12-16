@@ -692,6 +692,7 @@ function getAllUsers(){
 function setUsersToFollow(follows){
   let target = "/user/all";
   let actualUser = getCookie("username");
+  actualUser = actualUser.split("@")[0];
   let following = follows;
   let encType = "application/x-www-form-urlencoded" 
 
