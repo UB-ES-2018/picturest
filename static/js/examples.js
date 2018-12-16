@@ -64,6 +64,8 @@ function submitForm(formId) {
       window.location = "Perfil.html"
     }
     if(formId=='signup' && res.body.success){
+      document.cookie = setCookie('token',token,1);
+      document.cookie = setCookie('username',aux,1);
       window.location = "signin.html"
     }
     //document.querySelector('#' + formId + '-log').value = JSON.stringify(res.body)
@@ -205,8 +207,10 @@ function getImageByTag(){
       d2.appendChild(a);
       d.appendChild(i);
       d.appendChild(d2);
-      
-      document.querySelector('#columnaimagen').appendChild(d);
+
+      var columna = '#columnaimagen' + ((l%4) +1)
+      document.querySelector(columna).appendChild(d);
+      //document.querySelector('#columnaimagen').appendChild(d);
     }
     
   })
@@ -849,3 +853,63 @@ function getProfileImage(email, nom){
   })
 
 } // Fi funció getProfileImage()
+
+
+//Get Timeline
+function getImageTimeLine(){
+  let token = getCookie("token")
+  let encType = "application/x-www-form-urlencoded"
+  let target = "/user/timelineInfo"
+  
+  superagent
+  .get(basePath + target)
+  .set('x-access-token', token)
+  .set('Content-Type', encType)
+  //.set('Accept', 'application/json')
+  //.send(data)
+  .then(function(res) {
+    let imgs = res.body.imgs;
+    console.log(JSON.stringify(res.body));
+    
+    let ilen = imgs.length;
+     for (let l=0; l<ilen ; l++){
+      let source = basePath +"/image/"+ imgs[l]
+      console.log("-------",source)
+      
+      var d = document.createElement("div");
+      d.className = "hover";
+      
+      var i = document.createElement("img");
+      i.src= source;
+      i.style.cssText = 'width:100%'
+    
+      var d2 = document.createElement("div");
+      d2.className = "overlay";
+    
+      var a = document.createElement("a");
+      a.className = "btn btn-primary btn-danger"
+      a.setAttribute('href','#');
+      var idImg= 'pinImage("'+ imgs[l] + '")';
+      a.setAttribute('onclick',idImg);
+       var s = document.createElement("span");
+      s.className = "glyphicon glyphicon-pushpin"
+    
+      var pin = document.createTextNode("Pin");
+    
+      a.appendChild(s);
+      a.appendChild(pin);
+      d2.appendChild(a);
+      d.appendChild(i);
+      d.appendChild(d2);
+      
+      var columna = '#columnaimagen' + ((l%4) +1)
+      document.querySelector(columna).appendChild(d);
+    }
+    
+  })
+  .catch(function(e) {
+    console.log("Error al cargar el TimeLine")
+    console.error(e)
+  })
+}
+//Fin Get Timenline 
