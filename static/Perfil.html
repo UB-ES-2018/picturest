@@ -179,7 +179,7 @@ transform:translatey(0);
         <link rel="stylesheet" href="css/basic.css">
     </head>
 
-    <body>
+    <body onload="getImageTimeLine()">
 
       <!--Añadido-->
       <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -262,18 +262,11 @@ transform:translatey(0);
             </form>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="http://localhost:3000/static/Perfil.html">Home</a></li>
-          <li><a href="#">Following</a></li>
-          <li><a href="http://localhost:3000/static/profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-comment"></i><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
+          <li class="active"><a href="Perfil.html">Home</a></li>
+          <li><a href="Following.html">Following</a></li>
+          <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
+          <li><a href="chat.html"><i class="glyphicon glyphicon-comment"></i></a></li>
+            
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
             <ul class="dropdown-menu">
@@ -283,15 +276,13 @@ transform:translatey(0);
               <li class="divider"></li>
               <li><a href="#">Separated link</a></li>
             </ul>
+          </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-horizontal"></i></a>
             <ul class="dropdown-menu">
-              <li><a href="http://localhost:3000/static/settings.html">Edit Profile</a></li>
-              <li><a href="http://localhost:3000/static/pageBoards.html">Images Pinned</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
+              <li><a href="settings.html">Edit Profile</a></li>
+              <li><a href="pageBoards.html">Images Pinned</a></li>
+              <li><a onclick="logOut()">LogOut</a></li>
             </ul>
           </li>
         </ul>
@@ -301,76 +292,17 @@ transform:translatey(0);
     <!-- Photo Grid -->
     <div class="container">
       <div class="row"> 
-        <div id="columnaimagen1" class="column mx-3">
-          <div class="hover">
-            <img class="img-responsive" src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%" id="imatgeprova">
-            <div class="overlay">
-              <!-- PROVA!! -->
-              <!-- PROVA!! -->
-              <!-- AQUESTA ES LA PRIMERA FOTO (ADALT A L'ESQUERRA) -->
-              <a onclick="pinImage(imatgeprova)"  href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
+        <div id="columnaimagen1" class="column mx-3  mb-4">
+          
         </div>
         <div id="columnaimagen2" class="column mx-3 mb-4">
-          <div class="hover">
-            <img src="https://i.pinimg.com/originals/b1/f5/bc/b1f5bcb29f3bd34a1a6748425a176ed4.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="http://cdn.playbuzz.com/cdn/9a179aaa-0dde-4c30-825a-97aaf36e3261/1727c8b0-8b7f-4a96-8b06-327e1da59f00.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
+          
         </div>
         <div id="columnaimagen3" class="column mx-3 mb-4">
-          <div class="hover">
-            <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/bKuj0mU.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
-          <div class="hover">
-            <img src="https://i.imgur.com/FLpjfDb.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
+          
         </div>
-        <div id="columnaimagen" class="column mx-3">
-          <div class="hover">
-            <img src="http://images2.fanpop.com/images/photos/3500000/CHIBI-ICHIGO-kurosaki-ichigo-3548045-450-600.jpg" style="width:100%">
-            <div class="overlay">
-              <a href="#" class="btn btn-primary btn-danger"><span class="glyphicon glyphicon-pushpin"></span> Pin</a>
-            </div>
-          </div>
+        <div id="columnaimagen4" class="column mx-3  mb-4">
+          
         </div>  
       </div>
     </div>

@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html >
     <style>
     
     * {
         box-sizing: border-box;
     }
-
     body {
         margin: 0;
         font-family: Arial;
     }
-
     .header {
         text-align: center;
         padding: 32px;
     }
-
     .row {
         display: -ms-flexbox; /* IE10 */
         display: flex;
@@ -23,7 +20,6 @@
         flex-wrap: wrap;
         padding: 0 4px;
     }
-
     /* Create four equal columns that sits next to each other */
     .column {
         -ms-flex: 25%; /* IE10 */
@@ -31,12 +27,10 @@
         max-width: 25%;
         padding: 0 4px;
     }
-
     .column img {
         margin-top: 8px;
         vertical-align: middle;
     }
-
     /* Responsive layout - makes a two column-layout instead of four columns */
     @media screen and (max-width: 800px) {
         .column {
@@ -45,7 +39,6 @@
             max-width: 50%;
         }
     }
-
     /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
     @media screen and (max-width: 600px) {
         .column {
@@ -54,7 +47,6 @@
             max-width: 100%;
         }
     }
-
 .contenedor{
   width:90px;
   height:240px;
@@ -162,7 +154,6 @@ transform:translatey(0);
 #profileImage{
   cursor: pointer;
 }
-
 #profile-container {
   width: 150px;
   height: 150px;
@@ -181,13 +172,27 @@ transform:translatey(0);
 textarea {
   resize: none;
 }
+#followBtn {
+    background-color: #f5461b;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    width: 250px;
+    height: 40px;
+    position: absolute;
+    top: 20%;
+    left: 8%;
+}
+#people {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+}
 </style>
     
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="" content="width=device-width, initial-scale=1">
-        <title>Perfil Picturest</title>
+        <title>Following Picturest</title>
         <!-- CSS de Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- Latest compiled and minified JavaScript -->
@@ -198,7 +203,7 @@ textarea {
         
     </head>
 
-    <body onload="getProfileData()">
+    <body>
 
         
         <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -255,8 +260,8 @@ textarea {
         </div>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="Perfil.html">Home</a></li>
-          <li><a href="Following.html">Following</a></li>
-          <li class="active"><a href="profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
+          <li class="active"><a href="Following.html">Following</a></li>
+          <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i></a></li>
           <li><a href="chat.html"><i class="glyphicon glyphicon-comment"></i></a></li>
 
           <li class="dropdown">
@@ -281,15 +286,12 @@ textarea {
       </div><!-- /.navbar-collapse -->
     </nav>
 
-    <div>
-      <h1 style="margin-left:20px;">Picture User</h1>
-      <div id="profile-container" >
-        <image id="profileImage" src="Images/No-Profile.png" />
-      </div>
-      <div>
-        <textarea rows="4" cols="50" id="profileDesc" readonly></textarea>
-      </div>
-    </div>
+    <button id="followBtn" type="button" >People to follow</button>
+    <br> </br>
+
+    <ul id="people">
+
+    </ul> 
 
     <div class="contenedor">
         <button class="botonF1" data-toggle="modal" data-target="#modalRegisterForm">
@@ -301,7 +303,15 @@ textarea {
     </body>
 </html>
 
-<script>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script>    
+    var activat = true;
+    var btn_follow = document.getElementById("followBtn");
+    btn_follow.style.color = 'white';
+    btn_follow.onclick = function(){
+        getAllUsers();
+        btn_follow.disabled = "true"
+    }
     $('.botonF1').click(function(){
         $('.btn').addClass('animacionVer');
     })
